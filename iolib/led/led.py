@@ -35,7 +35,6 @@ class WandLed():
     def __init__(self, led_number):
         if led_number<=0 or led_number>NO_LED:
             raise Exception("Illegal led_number")
-        
         self._pin = LED_PINS[led_number-1]
         self._led = LED(self._pin)
 
@@ -71,7 +70,7 @@ class WandLed():
     def blink_fast(self):
         "Blink fast"
         self._led.blink(on_time=0.2, off_time=0.2, n=None, background=True)
-    
+
     def blink_3(self):
         "Blink 3 very fast"
         self._led.blink(on_time=0.1, off_time=0.1, n=3, background=True)
