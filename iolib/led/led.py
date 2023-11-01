@@ -7,20 +7,29 @@
 # Led 1: status led
 #   signals the general status of the device, eg ConfigMode, NormalOperation, NoNetworkConnection
 #
-# Led 2:
+# Led 2: Camera flash light
+# Led 3: Scanner Projecktor
 #
 
 
-NO_LED = 1      # number of suported leds
+NO_LED = 3      # number of suported leds
+
+LED_STATUS = 1
+LED_CAMERA_FLASH = 2
+LED_PROJECTOR = 3
 
 # HW models
+HW_PIZERO = "PIZERO"
+HW_CM4 = "CM4"
+HW_CM4_1 = "CM4_1"
 
 # DETECT HW
 HW="PIZERO"
 
 if HW=="PIZERO":
     from gpiozero import LED
-    LED_PINS = [17]
+    LED_PINS = [17, 17, 17]
+
 
 PIZERO_LED = 17
 
