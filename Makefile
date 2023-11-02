@@ -18,7 +18,7 @@ inst_iolib:
 install: inst_iolib
 
 deb-pkg:
-	mkdir -p tmp/pkg
+	mkdir -p tmp/pkg/usr/local/lib/wand
 	cp -r pkg/* tmp/pkg
 	cp -r iolib/ tmp/pkg/usr/local/lib/wand/
 	dpkg-deb --build --root-owner-group -Zxz tmp/pkg tmp/$(PKG_NAME).deb

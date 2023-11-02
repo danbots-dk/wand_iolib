@@ -29,9 +29,12 @@ HW="PIZERO"
 if HW=="PIZERO":
     from gpiozero import LED
     LED_PINS = [17, 17, 17]
+    #PIZERO_LED = 17
 
+if HW=="CM4":
+    from gpiozero import LED
+    LED_PINS = [13, 13, 12]
 
-PIZERO_LED = 17
 
 class WandLed():
     """
