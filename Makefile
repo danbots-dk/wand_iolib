@@ -1,7 +1,7 @@
 #
 # makefile for iolib
 #
-VERSION=1.0.0-10
+VERSION=1.0.0-11
 PKG_NAME=danbots-wand-iolib-$(VERSION)
 USR_LOCAL=/usr/local/lib/wand
 

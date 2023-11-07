@@ -1,8 +1,8 @@
 Package: danbots-wand-iolib
-Version: 1.0.0-10
+Version: 1.0.0-11
 Architecture: all
 #Architecture: armhf
-Maintainer: Peter Holm <peter@L-Holm.dk>
+Maintainer: Peter Holm <plh@danbots.com>
 Section: danbots/wand
 Depends: python3 (>=3.8)
 Priority: optional
