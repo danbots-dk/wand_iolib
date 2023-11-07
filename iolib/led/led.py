@@ -35,7 +35,7 @@ if HW=="PIZERO":
 if HW=="CM4":
     # 13 flash 12 dias
     from gpiozero import LED
-    LED_PINS = [12, 13, 11]
+    LED_PINS = [11, 13, 12]
 
 
 class WandLed():
