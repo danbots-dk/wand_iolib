@@ -25,13 +25,18 @@ HW_CM4_1 = "CM4_1"
 
 # DETECT HW
 HW="PIZERO"
+HW="CM4"
 
 if HW=="PIZERO":
     from gpiozero import LED
     LED_PINS = [17, 17, 17]
+    #PIZERO_LED = 17
 
+if HW=="CM4":
+    # 13 flash 12 dias
+    from gpiozero import LED
+    LED_PINS = [11, 13, 12]
 
-PIZERO_LED = 17
 
 class WandLed():
     """
@@ -41,9 +46,9 @@ class WandLed():
     :param led_number:
     """
 
-    def __init__(self, led_number):
+    def __init__(self, led_number: int):
         if led_number<=0 or led_number>NO_LED:
-            raise Exception("Illegal led_number")
+            raise IndexError("Illegal led_number")
         self._pin = LED_PINS[led_number-1]
         self._led = LED(self._pin)
 
@@ -80,6 +85,10 @@ class WandLed():
         "Blink fast"
         self._led.blink(on_time=0.2, off_time=0.2, n=None, background=True)
 
-    def blink_3(self):
-        "Blink 3 very fast"
-        self._led.blink(on_time=0.1, off_time=0.1, n=3, background=True)
+    def blink_3(self, n=3):
+        "Blink n very fast"
+        self._led.blink(on_time=0.1, off_time=0.1, n=n, background=True)
+
+    def blink_n(self, n=3):
+        "Blink n very fast"
+        self._led.blink(on_time=0.1, off_time=0.1, n=n, background=True)
