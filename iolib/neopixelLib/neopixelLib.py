@@ -5,6 +5,12 @@ import threading
 import neopixel
 import board
 
+current_path = os.getcwd()
+if current_path.startswith("/usr/local/lib/wand"):
+    path.append("/usr/local/lib/wand")
+else:
+    path.append("/home/peter/iolib")
+
 # Define a class called WandLed to represent a wand LED with typical on/off and blink behavior.
 class WandLed:
     """

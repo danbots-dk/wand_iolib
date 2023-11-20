@@ -2,7 +2,7 @@
 from sys import path
 from time import sleep
 path.append("/usr/local/lib/wand")
-from iolib.led import WandLed       # pylint: disable=wrong-import-position
+from led import WandLed       # pylint: disable=wrong-import-position
 
 SLEEP_TIME = 5
 
