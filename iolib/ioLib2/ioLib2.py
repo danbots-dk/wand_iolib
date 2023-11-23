@@ -2,6 +2,13 @@ import gpiod
 import time
 import threading
 import os
+from sys import path
+
+current_path = os.getcwd()
+if current_path.startswith("/usr/local/lib/wand"):
+    path.append("/usr/local/lib/wand")
+else:
+    path.append("/home/peter/iolib")
 
 # sudo apt install python3-libgpiod
 

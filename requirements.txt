@@ -1,3 +1,5 @@
 pylint
 gpiozero
 adafruit-circuitpython-neopixel
+eeprom
+PySensors
