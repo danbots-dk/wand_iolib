@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+# enable i2c
+
+sed /boot/config.txt -i -e "s/^#dtparam=i2c_arm*/dtparam=i2c_arm=on/"
+# sed /etc/modules -i -e "s/^#[[:space:]]*\(i2c[-_]dev\)/\1/"
+# if ! grep -q "^i2c[-_]dev" /etc/modules; then 
+#     printf "i2c-dev\n" >> /etc/modules
+# fi
+
+dtparam i2c_arm=on
+
+# enablei2c-sensor and max17040
+	
+sed /boot/config.txt -i -e "s/^#dtoverlay=i2c-sensor,max17040/dtoverlay=i2c-sensor,max17040/"
+if ! grep -q "^dtoverlay=i2c-sensor,max17040" /boot/config.txt ; then 
+    printf "dtoverlay=i2c-sensor,max17040\n" >> /boot/config.txt 
+fi
+
