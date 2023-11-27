@@ -34,6 +34,11 @@ class WandIO:
 
         self.mcp_gpio_lines = {} 
         self.rpi_gpio_lines = {}
+        
+        print(self.mcp_input_lines)
+        #pin_number, consumer = zip([1], ["button_reset"])
+        self.configure_output("mcp", gpio_list=[1, "button_reset"])
+        self.set_output("mcp", 1, 1)
 
         # Configure MCP23008 input GPIO
         # for pin_number, consumer in zip(self.mcp_input_lines[0], self.mcp_input_lines[1]):
@@ -208,10 +213,10 @@ class WandIO:
         return self.read_input("mcp",0)
         
 def test_interrupt(event):
-    print("test interrupt")
+    print("test interrupt123")
 
 def test_interrupt2(event):
-    print("test2 interrupt")
+    print("test2 interrupt1234")
 
 
 if __name__ == "__main__":
