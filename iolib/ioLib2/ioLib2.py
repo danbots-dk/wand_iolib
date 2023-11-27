@@ -10,19 +10,24 @@ if current_path.startswith("/usr/local/lib/wand"):
 else:
     path.append("/home/peter/iolib")
 
-# sudo apt install python3-libgpiod
 
 # IMPORTANT #
-# This library should only be used for creating high level functions
+# Import the required library
+# Note: sudo apt install python3-libgpiod
+# IMPORTANT: This library should only be used for creating high-level functions
 
+# Class definition for WandIO
 class WandIO:
     def __init__(self):
+                # Define chip labels for GPIO chips
         chip_label0 = 'gpiochip0'
         chip_label2 = 'gpiochip2'
 
+        # Create instances of GPIO chips
         self.chip0 = gpiod.Chip(chip_label0)
         self.chip2 = gpiod.Chip(chip_label2)
 
+        # Define input/output/interrupt lines for MCP and RPi
         self.mcp_input_lines = [[0, 6, 7], ["power_stat", "power", "power"]]
         self.rpi_input_lines = [[], []]
         
@@ -30,13 +35,12 @@ class WandIO:
         self.rpi_output_lines = [[4, 12, 13, 22], ["bootloader","DIAS", "flash" "kill"]]
 
         self.mcp_interrupt_lines = [[2, 3], ["button1", "button2"]]
-        self.rpi_interrupt_lines = [[27, 6, 17], ["on_off_interrupt", "carrier_pcb_temp", "battert_fuel_interrupt"]]
+        self.rpi_interrupt_lines = [[27, 6, 17], ["on_off_interrupt", "carrier_pcb_temp", "battery_fuel_interrupt"]]
 
         self.mcp_gpio_lines = {} 
         self.rpi_gpio_lines = {}
         
-        print(self.mcp_input_lines)
-        #pin_number, consumer = zip([1], ["button_reset"])
+        # Configure and set an output pin on the MCP chip
         self.configure_output("mcp", gpio_list=[1, "button_reset"])
         self.set_output("mcp", 1, 1)
 
@@ -68,13 +72,16 @@ class WandIO:
         #for pin_number, consumer in zip(self.rpi_interrupt_lines[0], self.rpi_interrupt_lines[1]):
         #     self.configure_interrupt(chip_label="rpi", gpio_list=[pin_number, consumer], name=consumer)
         
-
+    
+    # Method to configure input pins
     def configure_input(self, chip_label, gpio_list):
+        # Check the chip label and configure input pin accordingly
         if (chip_label == "rpi"):
             if gpio_list[0] not in self.rpi_gpio_lines:
                 gpio_line = self.chip0.get_line(gpio_list[0])
                 gpio_line.request(consumer=gpio_list[1], type=gpiod.LINE_REQ_DIR_IN)
                 self.rpi_gpio_lines[gpio_list[0]] = gpio_line
+            # Handle cases where the pin is already configured
             else:
                 print(f"Cannot configure input on {chip_label} pin {gpio_list[0]}. Is there an existing configuration on the same pins elsewhere?")
                 return 0
@@ -84,11 +91,14 @@ class WandIO:
                 gpio_line = self.chip2.get_line(gpio_list[0])
                 gpio_line.request(consumer=gpio_list[1], type=gpiod.LINE_REQ_DIR_IN)
                 self.mcp_gpio_lines[gpio_list[0]] = gpio_line
+            # Handle cases where the pin is already configured
             else:
                 print(f"Cannot configure input on {chip_label} pin {gpio_list[0]}. Is there an existing configuration on the same pins elsewhere?")
                 return 0
-
+            
+    # Method to read the state of an input pin
     def read_input(self, chip_label, pin_number):
+            # Check the chip label and read the state of the input pin
             if chip_label == "rpi":
                 if pin_number in self.rpi_gpio_lines:
                     gpio_line = self.rpi_gpio_lines[pin_number]
@@ -101,6 +111,7 @@ class WandIO:
                         return gpio_line.get_value()
             return None  # Return None if the GPIO line is not fo
     
+    # Method to configure output pins
     def configure_output(self, chip_label, gpio_list):
         if (chip_label == "rpi"):
             if gpio_list[0] not in self.rpi_gpio_lines:
@@ -119,6 +130,7 @@ class WandIO:
                 print(f"Cannot configure output on {chip_label} pin {gpio_list[0]}. Is there an existing configuration on the same pins elsewhere?")
                 return 0
 
+    
     def set_output(self, chip_label, pin_number, value):
         if chip_label == "rpi":
             if pin_number in self.rpi_gpio_lines:
