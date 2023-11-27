@@ -1,4 +1,7 @@
+from sys import path
+path.append("/usr/local/lib/wand/iolib")
 from ioLib2 import WandIO
+import time
 
 
 
@@ -18,6 +21,11 @@ class Button():
             # Interrupt handler for on/off ic (max16150)
             self.wand.configure_interrupt(chip_label="rpi", gpio_list=[27, "on_off_ic"], callback=callback)
 
+    def reset_button(self):
+        self.wand.set_output("mcp", 1, 0)
+        time.sleep(0.01)
+        self.wand.set_output("mcp", 1, 1)
+
     # Interrupt handler for on/off button press
     # Use set_on_off_ic_interrupt() instead unless you know what you are doing
     def set_on_off_button_interrupt(self, callback):
@@ -30,7 +38,10 @@ if __name__ == "__main__":
 
     button=Button()
     button.set_button_interrupt(callback=int_callback, button="front_top")
+    button.set_button_interrupt(callback=int_callback, button="front_button")
+    # button.wand.set_output("mcp", 1, 1)
 
     while(1):
         time.sleep(0.1)
+        
         pass
