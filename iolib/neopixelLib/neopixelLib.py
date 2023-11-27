@@ -4,6 +4,8 @@ import time
 import threading
 import neopixel
 import board
+from sys import path
+import os
 
 current_path = os.getcwd()
 if current_path.startswith("/usr/local/lib/wand"):
@@ -103,7 +105,6 @@ class WandLed:
             for i,led in enumerate(self.locations):
                 self.pixels[led] = (self.r[i], self.g[i], self.b[i], 0)
             time.sleep(0.1)
-            print(self.r[1])
             self.pixels.show()
             if(self.enable != 1):
                 for i in range(2):
