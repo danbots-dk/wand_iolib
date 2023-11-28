@@ -12,6 +12,17 @@ sed /boot/config.txt -i -e "s/^#dtparam=i2c_arm*/dtparam=i2c_arm=on/"
 
 dtparam i2c_arm=on
 
+sed /boot/config.txt -i -e "s/^#dtparam=spi=on/dtparam=spi=on/"
+if ! grep -q "^dtparam=spi=on" /boot/config.txt ; then 
+    printf "dtparam=spi=on\n" >> /boot/config.txt 
+fi
+
+sed /boot/config.txt -i -e "s/^#enable_uart=1/enable_uart=1/"
+if ! grep -q "^enable_uart=1" /boot/config.txt ; then 
+    printf "enable_uart=1\n" >> /boot/config.txt 
+fi
+
+
 # enablei2c-sensor and max17040
 	
 sed /boot/config.txt -i -e "s/^#dtoverlay=i2c-sensor,max17040/dtoverlay=i2c-sensor,max17040/"
@@ -38,3 +49,5 @@ sed /boot/config.txt -i -e "s/^#dtoverlay=at24c512/dtoverlay=at24c512/"
 if ! grep -q "^dtoverlay=at24c512" /boot/config.txt ; then 
     printf "dtoverlay=at24c512\n" >> /boot/config.txt 
 fi
+
+
