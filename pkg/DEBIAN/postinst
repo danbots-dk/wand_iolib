@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+cp /usr/local/lib/wand/iolib/eepromLib/at24c512.dtbo /boot/overlays/at24c512.dtbo
