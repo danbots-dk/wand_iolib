@@ -63,9 +63,9 @@ class WandLed:
         :param n: Number of times to repeat the blink pattern.
         """
         for i in range(n):
-            self.set_button_led(location, 255, 255, 255)  # Turn the LED ON
+            self.set_button_led(location, 255, 255, 0)  # Turn the LED ON
             time.sleep(on_time)
-            self.set_button_led(location, 1, 0, 0)  # Turn the LED OFF
+            self.set_button_led(location, 0, 0, 0)  # Turn the LED OFF
             time.sleep(off_time)
 
     def set_button_led(self, location, r, g, b):
@@ -136,21 +136,24 @@ if __name__ == "__main__":
     led = WandLed(2)
     #led.set_button_led(1, 255, 0, 0)
     # Perform various LED operations with delays in between.
-    led.close()
+    #led.close()
     time.sleep(1)
     led.blink_n(1,3)
+    time.sleep(0.2)
+    led.blink_n(0,3)
     
     time.sleep(2)
     led.close()
-    led.blink_3(1)
+    #led.blink_3(1)
     
-    time.sleep(2)
+    #time.sleep(2)
     led.close()
     #
     time.sleep(1)
-    #led.set_button_led(1, 1, 0, 0)
+    
     time.sleep(1)
-    led.set_button_led(0, 255, 255, 255)
+    led.set_button_led(0, 255, 255, 0)
+    led.set_button_led(1, 0, 0, 0)
 
     time.sleep(0.1)
     led.close()
