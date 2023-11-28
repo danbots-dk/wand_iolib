@@ -1,0 +1,12 @@
+[MASTER]
+
+[MESSAGES CONTROL]
+
+disable=line-too-long
+        
+[BASIC]
+
+good-names=i,
+           j,
+           k,
+
