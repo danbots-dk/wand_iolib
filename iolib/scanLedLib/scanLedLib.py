@@ -61,7 +61,7 @@ class ScanLed:
 
 if __name__ == "__main__":
     try:
-        pwm_controller = ScanLed(dias=12, flash=13, frequency=5000)
+        pwm_controller = ScanLed()
         pwm_controller.set_dias(duty_cycle=0.5)
         pwm_controller.set_flash(duty_cycle=0.5)
 
