@@ -1,6 +1,5 @@
 from gpiozero import PWMOutputDevice
 from gpiozero.pins.pigpio import PiGPIOFactory
-#from gpiozero.pins.rpio import RPIOPin
 import time
 
 class ScanLed:
