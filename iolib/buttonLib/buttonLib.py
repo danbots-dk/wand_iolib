@@ -11,6 +11,7 @@ class Button:
         Initializes the Button class with a WandIO instance.
         """
         self.wand = WandIO()
+        self.reset_button()
 
     def set_button_interrupt(self, callback: Callable[[gpiod.LineEvent], None], button: str) -> None:
         """
@@ -59,4 +60,6 @@ if __name__ == "__main__":
     # button.wand.set_output("mcp", 1, 1)
 
     while True:
+        reset = input("press enter to reset")
+        button.reset_button()
         time.sleep(0.1)
