@@ -114,6 +114,8 @@ class WandLed:
 
     def close(self):
         """Close all LED threads"""
+        for led in self.locations:
+            self.set_button_led(led, 0,0,0)
         self.enable=0
 
     def blink_fast(self, location):
@@ -155,7 +157,7 @@ if __name__ == "__main__":
     led.set_button_led(0, 255, 255, 0)
     led.set_button_led(1, 0, 0, 0)
 
-    time.sleep(0.1)
+    time.sleep(1)
     led.close()
     #led.close(1)
     # Continuously cycle through an RGB color gradient with a delay.
