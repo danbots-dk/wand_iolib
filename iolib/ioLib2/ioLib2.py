@@ -3,31 +3,26 @@ import time
 import threading
 import os
 from sys import path
+from typing import List, Optional, Callable, Union
 
 current_path = os.getcwd()
+
 if current_path.startswith("/usr/local/lib/wand"):
     path.append("/usr/local/lib/wand")
 else:
     path.append("/home/peter/iolib")
 
-
-# IMPORTANT #
-# Import the required library
-# Note: sudo apt install python3-libgpiod
-# IMPORTANT: This library should only be used for creating high-level functions
-
-# Class definition for WandIO
 class WandIO:
     def __init__(self):
-                # Define chip labels for GPIO chips
+        """
+        Initializes WandIO class, creating instances for GPIO chips and setting up initial configurations.
+        """
         chip_label0 = 'gpiochip0'
         chip_label2 = 'gpiochip2'
 
-        # Create instances of GPIO chips
         self.chip0 = gpiod.Chip(chip_label0)
         self.chip2 = gpiod.Chip(chip_label2)
 
-        # Define input/output/interrupt lines for MCP and RPi
         self.mcp_input_lines = [[0, 6, 7], ["power_stat", "power", "power"]]
         self.rpi_input_lines = [[], []]
         
@@ -40,98 +35,99 @@ class WandIO:
         self.mcp_gpio_lines = {} 
         self.rpi_gpio_lines = {}
         
-        # Configure and set an output pin on the MCP chip
         self.configure_output("mcp", gpio_list=[1, "button_reset"])
         self.set_output("mcp", 1, 1)
 
-        # Configure MCP23008 input GPIO
-        # for pin_number, consumer in zip(self.mcp_input_lines[0], self.mcp_input_lines[1]):
-        #      self.configure_input(chip_label="mcp", gpio_list=[pin_number, consumer])
+    def configure_input(self, chip_label: str, gpio_list: List[Union[int, str]]) -> Optional[int]:
+        """
+        Configures an input pin on the specified GPIO chip.
 
-        # Configure MCP23008 output GPIO
-        # for pin_number, consumer in zip(self.mcp_output_lines[0], self.mcp_output_lines[1]):
-        #     self.configure_output(chip_label="mcp", gpio_list=[pin_number, consumer])
+        Args:
+            chip_label (str): Label of the GPIO chip ("rpi" or "mcp").
+            gpio_list (List[Union[int, str]]): List containing pin number and consumer name.
 
-
-
-        # Configure RPi input GPIO
-        # for pin_number, consumer in zip(self.rpi_input_lines[0], self.rpi_input_lines[1]):
-        #     self.configure_input(chip_label="rpi", gpio_list=[pin_number, consumer])
-
-        # Configure RPi output GPIO
-        # for pin_number, consumer in zip(self.rpi_output_lines[0], self.rpi_output_lines[1]):
-        #     self.configure_output(chip_label="rpi", gpio_list=[pin_number, consumer])
-
-
-
-        # Configure MCP23008 interrupt GPIO
-        #for pin_number, consumer in zip(self.mcp_interrupt_lines[0], self.mcp_interrupt_lines[1]):
-        #     self.configure_interrupt(chip_label="mcp", gpio_list=[pin_number, consumer], name=consumer)
-
-        # Configure RPi interrupt GPIO
-        #for pin_number, consumer in zip(self.rpi_interrupt_lines[0], self.rpi_interrupt_lines[1]):
-        #     self.configure_interrupt(chip_label="rpi", gpio_list=[pin_number, consumer], name=consumer)
-        
-    
-    # Method to configure input pins
-    def configure_input(self, chip_label, gpio_list):
-        # Check the chip label and configure input pin accordingly
-        if (chip_label == "rpi"):
+        Returns:
+            Optional[int]: None if the configuration fails, otherwise 0.
+        """
+        if chip_label == "rpi":
             if gpio_list[0] not in self.rpi_gpio_lines:
                 gpio_line = self.chip0.get_line(gpio_list[0])
                 gpio_line.request(consumer=gpio_list[1], type=gpiod.LINE_REQ_DIR_IN)
                 self.rpi_gpio_lines[gpio_list[0]] = gpio_line
-            # Handle cases where the pin is already configured
             else:
                 print(f"Cannot configure input on {chip_label} pin {gpio_list[0]}. Is there an existing configuration on the same pins elsewhere?")
-                return 0
-                
-        elif (chip_label == "mcp"):
+                return None
+        elif chip_label == "mcp":
             if gpio_list[0] not in self.mcp_gpio_lines:
                 gpio_line = self.chip2.get_line(gpio_list[0])
                 gpio_line.request(consumer=gpio_list[1], type=gpiod.LINE_REQ_DIR_IN)
                 self.mcp_gpio_lines[gpio_list[0]] = gpio_line
-            # Handle cases where the pin is already configured
             else:
                 print(f"Cannot configure input on {chip_label} pin {gpio_list[0]}. Is there an existing configuration on the same pins elsewhere?")
-                return 0
-            
-    # Method to read the state of an input pin
-    def read_input(self, chip_label, pin_number):
-            # Check the chip label and read the state of the input pin
-            if chip_label == "rpi":
-                if pin_number in self.rpi_gpio_lines:
-                    gpio_line = self.rpi_gpio_lines[pin_number]
-                    if gpio_line.is_requested():
-                        return gpio_line.get_value()
-            elif chip_label == "mcp":
-                if pin_number in self.mcp_gpio_lines:
-                    gpio_line = self.mcp_gpio_lines[pin_number]
-                    if gpio_line.is_requested():
-                        return gpio_line.get_value()
-            return None  # Return None if the GPIO line is not fo
-    
-    # Method to configure output pins
-    def configure_output(self, chip_label, gpio_list):
-        if (chip_label == "rpi"):
+                return None
+        return 0
+
+    def read_input(self, chip_label: str, pin_number: int) -> Optional[bool]:
+        """
+        Reads the state of the specified input pin.
+
+        Args:
+            chip_label (str): Label of the GPIO chip ("rpi" or "mcp").
+            pin_number (int): Pin number to read.
+
+        Returns:
+            Optional[bool]: None if the pin is not found, otherwise the state of the pin.
+        """
+        if chip_label == "rpi":
+            if pin_number in self.rpi_gpio_lines:
+                gpio_line = self.rpi_gpio_lines[pin_number]
+                if gpio_line.is_requested():
+                    return gpio_line.get_value()
+        elif chip_label == "mcp":
+            if pin_number in self.mcp_gpio_lines:
+                gpio_line = self.mcp_gpio_lines[pin_number]
+                if gpio_line.is_requested():
+                    return gpio_line.get_value()
+        return None
+
+    def configure_output(self, chip_label: str, gpio_list: List[Union[int, str]]) -> Optional[int]:
+        """
+        Configures an output pin on the specified GPIO chip.
+
+        Args:
+            chip_label (str): Label of the GPIO chip ("rpi" or "mcp").
+            gpio_list (List[Union[int, str]]): List containing pin number and consumer name.
+
+        Returns:
+            Optional[int]: None if the configuration fails, otherwise 0.
+        """
+        if chip_label == "rpi":
             if gpio_list[0] not in self.rpi_gpio_lines:
                 gpio_line = self.chip0.get_line(gpio_list[0])
                 gpio_line.request(consumer=gpio_list[1], type=gpiod.LINE_REQ_DIR_OUT)
                 self.rpi_gpio_lines[gpio_list[0]] = gpio_line
             else:
                 print(f"Cannot configure output on {chip_label} pin {gpio_list[0]}. Is there an existing configuration on the same pins elsewhere?")
-                return 0
-        elif (chip_label == "mcp"):
+                return None
+        elif chip_label == "mcp":
             if gpio_list[0] not in self.mcp_gpio_lines:
                 gpio_line = self.chip2.get_line(gpio_list[0])
                 gpio_line.request(consumer=gpio_list[1], type=gpiod.LINE_REQ_DIR_OUT)
                 self.mcp_gpio_lines[gpio_list[0]] = gpio_line
             else:
                 print(f"Cannot configure output on {chip_label} pin {gpio_list[0]}. Is there an existing configuration on the same pins elsewhere?")
-                return 0
+                return None
+        return 0
 
-    
-    def set_output(self, chip_label, pin_number, value):
+    def set_output(self, chip_label: str, pin_number: int, value: int) -> None:
+        """
+        Sets the state of the specified output pin.
+
+        Args:
+            chip_label (str): Label of the GPIO chip ("rpi" or "mcp").
+            pin_number (int): Pin number to set.
+            value (int): Value to set (0 or 1).
+        """
         if chip_label == "rpi":
             if pin_number in self.rpi_gpio_lines:
                 gpio_line = self.rpi_gpio_lines[pin_number]
@@ -143,7 +139,14 @@ class WandIO:
                 if gpio_line.is_requested():
                     gpio_line.set_value(value)
 
-    def release_pin(self, chip_label, pin_number):
+    def release_pin(self, chip_label: str, pin_number: int) -> None:
+        """
+        Releases the specified pin.
+
+        Args:
+            chip_label (str): Label of the GPIO chip ("rpi" or "mcp").
+            pin_number (int): Pin number to release.
+        """
         if chip_label == "rpi":
             if pin_number in self.rpi_gpio_lines:
                 gpio_line = self.rpi_gpio_lines.pop(pin_number)
@@ -153,26 +156,41 @@ class WandIO:
                 gpio_line = self.mcp_gpio_lines.pop(pin_number)
                 gpio_line.release()
 
-    def release_all_pins(self):
-        # Release all RPi GPIO pins
-        rpi_keys = list(self.rpi_gpio_lines.keys())  # Create a list of keys
+    def release_all_pins(self) -> None:
+        """
+        Releases all pins on both MCP and RPi.
+        """
+        rpi_keys = list(self.rpi_gpio_lines.keys())
         for pin_number in rpi_keys:
             gpio_line = self.rpi_gpio_lines.pop(pin_number)
             gpio_line.release()
-            # configure as output to avoid leakage (high impedance)?
-            # gpio_line.request(consumer="input", type=gpiod.LINE_REQ_DIR_IN)  # Configure as input
 
-        # Release all MCP23008 GPIO pins
         mcp_keys = list(self.mcp_gpio_lines.keys())
         for pin_number in mcp_keys:
             gpio_line = self.mcp_gpio_lines.pop(pin_number)
             gpio_line.release()
-            # configure as output to avoid leakage (high impedance)?
-            # gpio_line.request(consumer="input", type=gpiod.LINE_REQ_DIR_IN)  # Configure as input
 
-    def configure_interrupt(self, chip_label, gpio_list, debounce = 0.1, callback=None):
-        if callback == None:
-            return 0
+    def configure_interrupt(
+        self,
+        chip_label: str,
+        gpio_list: List[Union[int, str]],
+        debounce: float = 0.1,
+        callback: Optional[Callable[[gpiod.LineEvent], None]] = None
+    ) -> Optional[int]:
+        """
+        Configures an interrupt on the specified pin.
+
+        Args:
+            chip_label (str): Label of the GPIO chip ("rpi" or "mcp").
+            gpio_list (List[Union[int, str]]): List containing pin number and consumer name.
+            debounce (float): Debounce time in seconds.
+            callback (Optional[Callable[[gpiod.LineEvent], None]]): Callback function to handle the interrupt.
+
+        Returns:
+            Optional[int]: None if the configuration fails, otherwise 0.
+        """
+        if callback is None:
+            return None
         if chip_label == "mcp" and gpio_list[0] not in self.mcp_gpio_lines:
             gpio_line = self.chip2.get_line(gpio_list[0])
             gpio_line.request(consumer=gpio_list[1], type=gpiod.LINE_REQ_EV_RISING_EDGE)
@@ -183,53 +201,49 @@ class WandIO:
             self.rpi_gpio_lines[gpio_list[0]] = gpio_line
         else:
             print(f"Cannot create interrupt on {chip_label} pin {gpio_list[0]}. Is there an existing interrupt on the same pins elsewhere?")
-            return 0
+            return None
             
         def interrupt_thread():
-            while True: # loop in case event_wait() times out
+            while True:
                 event = gpio_line.event_wait(10000)
                 if event:
-                    gpio_line.event_read() # release interrupt
+                    gpio_line.event_read()
                     callback(event)
-                    
-                    
-                    # interrupt_hold_time = 0
-                    # interrupt_hold_time_threshold = 3
+
                     intterupt_hold_delay = 0.05
-                    # Wait for the button to be released (polling)
-                    while gpio_line.get_value() == 1:                        
+                    while gpio_line.get_value() == 1:
                         time.sleep(intterupt_hold_delay)
-                        # interrupt_hold_time = interrupt_hold_time + intterupt_hold_delay
-                        # print(interrupt_hold_time)
-                        # if (interrupt_hold_time > interrupt_hold_time_threshold):
-                        #     os.system("shutdown now")
-                        #   # Turn off, vibrate etc.
-                    
-                    # Pop the pin from the appropriate dictionary
+
                     if chip_label == "mcp" and gpio_list[0] in self.mcp_gpio_lines:
                         self.mcp_gpio_lines.pop(gpio_list[0])
                     elif chip_label == "rpi" and gpio_list[0] in self.rpi_gpio_lines:
                         self.rpi_gpio_lines.pop(gpio_list[0])
 
                     gpio_line.release()
-                    time.sleep(debounce) # acts as a debounce
+                    time.sleep(debounce)
                     self.configure_interrupt(chip_label, gpio_list, debounce, callback)
                     break
+
         thread = threading.Thread(target=interrupt_thread)
         thread.daemon = True
         thread.start()
-        
-    def get_primary_power_source(self):
-        # 0: USB is primary
-        # 1: Battery is primary
-        return self.read_input("mcp",0)
-        
-def test_interrupt(event):
+
+    def get_primary_power_source(self) -> Optional[bool]:
+        """
+        Returns the state of the primary power source.
+
+        Returns:
+            Optional[bool]: None if the pin is not found, otherwise the state of the pin.
+        """
+        return self.read_input("mcp", 0)
+
+# Function to test interrupt handling
+def test_interrupt(event: gpiod.LineEvent) -> None:
     print("test interrupt123")
 
-def test_interrupt2(event):
+# Function to test interrupt handling
+def test_interrupt2(event: gpiod.LineEvent) -> None:
     print("test2 interrupt1234")
-
 
 if __name__ == "__main__":
     wand = WandIO()
@@ -245,6 +259,3 @@ if __name__ == "__main__":
             print("Releasing all pins")
             wand.release_all_pins()
             break
-        
-
- 
