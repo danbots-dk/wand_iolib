@@ -18,7 +18,7 @@ class WandLed:
     """
     Represents a neopixel LED with typical on/off and blink behavior.
 
-    :param led_number: The LED number to control (1 or 2).
+    :param led_number: The LED number to control.
     """
 
     def __init__(self, num_leds):
@@ -31,7 +31,7 @@ class WandLed:
         for i in range(num_leds):
             self.locations[i] = i
         # Initialize NeoPixel object with the specified parameters.
-        self.pixels = neopixel.NeoPixel(board.D10, 2, brightness=0.5, pixel_order=neopixel.RGBW, auto_write=False)
+        self.pixels = neopixel.NeoPixel(board.D10, num_leds, brightness=0.5, pixel_order=neopixel.RGBW, auto_write=False)
         
         # Create a list to hold two thread references for LED control.
         self.led_threads = [None, None]
@@ -136,23 +136,24 @@ if __name__ == "__main__":
     led = WandLed(2)
     #led.set_button_led(1, 255, 0, 0)
     # Perform various LED operations with delays in between.
+    led.close()
     time.sleep(1)
     led.blink_n(1,3)
-    time.sleep(1)
-    led.blink_3(1)
+    
     time.sleep(2)
+    led.close()
+    led.blink_3(1)
+    
+    time.sleep(2)
+    led.close()
     #
     time.sleep(1)
     #led.set_button_led(1, 1, 0, 0)
     time.sleep(1)
-    led.set_button_led(1, 0, 0, 0)
+    led.set_button_led(0, 255, 255, 255)
+
     time.sleep(0.1)
     led.close()
     #led.close(1)
     # Continuously cycle through an RGB color gradient with a delay.
-    while(1):
-        for i in range(255):
-            #print(i)
-            time.sleep(2)
-        print("ses")
-        time.sleep(1)
+    
