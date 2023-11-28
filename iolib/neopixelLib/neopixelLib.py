@@ -103,7 +103,8 @@ class WandLed:
         """
         while(1):
             for i,led in enumerate(self.locations):
-                self.pixels[led] = (self.r[i], self.g[i], self.b[i], 0)
+                # self.pixels[led] = (self.r[i], self.g[i], self.b[i], 0)
+                self.pixels[led] = (self.r[i], self.g[i], 0, 0)
             time.sleep(0.1)
             self.pixels.show()
             if(self.enable != 1):
