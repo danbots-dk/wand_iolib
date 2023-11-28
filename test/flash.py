@@ -15,10 +15,14 @@ if NEW:
     sleep(3)
     print("Turn off")
     led.set_flash(0)
+    sleep(3)
     print("Turning flash on")
     led.set_flash(1)
     print("pause")
     sleep(3)
+    print("Turn off")
+    led.set_flash(0)
+
     print("close")
 else:
     print("Turning flash on")
