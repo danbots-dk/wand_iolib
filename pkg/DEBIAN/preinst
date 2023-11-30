@@ -50,4 +50,7 @@ if ! grep -q "^dtoverlay=at24c512" /boot/config.txt ; then
     printf "dtoverlay=at24c512\n" >> /boot/config.txt 
 fi
 
-
+sed /boot/config.txt -i -e "s/^#gpio=4=dl,op/gpio=4=dl,op/"
+if ! grep -q "^gpio=4=dl,op" /boot/config.txt ; then 
+    printf "gpio=4=dl,op\n" >> /boot/config.txt 
+fi
