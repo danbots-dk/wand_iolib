@@ -35,8 +35,12 @@ class WandIO:
         self.mcp_gpio_lines = {} 
         self.rpi_gpio_lines = {}
         
+        # initialize pin state
         self.configure_output("mcp", gpio_list=[1, "button_reset"])
         self.set_output("mcp", 1, 1)
+
+        self.configure_output("rpi", gpio_list=[4, "bootloader"])
+        self.set_output("mcp", 4, 0)
 
     def configure_input(self, chip_label: str, gpio_list: List[Union[int, str]]) -> Optional[int]:
         """
