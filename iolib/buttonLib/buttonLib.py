@@ -35,8 +35,6 @@ class Button:
             raise Exception(f"Button name input incorrect, received {button}")
 
 
-
-
     def reset_button(self) -> None:
         """
         Resets the button by toggling its output state.

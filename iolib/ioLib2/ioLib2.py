@@ -175,6 +175,7 @@ class WandIO:
         chip_label: str,
         gpio_list: List[Union[int, str]],
         debounce: float = 0.1,
+        rising_or_falling: int = 1,
         callback: Optional[Callable[[gpiod.LineEvent], None]] = None
     ) -> Optional[int]:
         """
@@ -189,15 +190,21 @@ class WandIO:
         Returns:
             Optional[int]: None if the configuration fails, otherwise 0.
         """
+
+        if rising_or_falling == 1:
+            interrupt_type = gpiod.LINE_REQ_EV_RISING_EDGE
+        elif rising_or_falling == 0:
+            interrupt_type = gpiod.LINE_REQ_EV_FALLING_EDGE
+
         if callback is None:
             return None
         if chip_label == "mcp" and gpio_list[0] not in self.mcp_gpio_lines:
             gpio_line = self.chip2.get_line(gpio_list[0])
-            gpio_line.request(consumer=gpio_list[1], type=gpiod.LINE_REQ_EV_RISING_EDGE)
+            gpio_line.request(consumer=gpio_list[1], type=interrupt_type)
             self.mcp_gpio_lines[gpio_list[0]] = gpio_line
         elif chip_label == "rpi" and gpio_list[0] not in self.rpi_gpio_lines:
             gpio_line = self.chip0.get_line(gpio_list[0])
-            gpio_line.request(consumer=gpio_list[1], type=gpiod.LINE_REQ_EV_RISING_EDGE)
+            gpio_line.request(consumer=gpio_list[1], type=interrupt_type)
             self.rpi_gpio_lines[gpio_list[0]] = gpio_line
         else:
             print(f"Cannot create interrupt on {chip_label} pin {gpio_list[0]}. Is there an existing interrupt on the same pins elsewhere?")
@@ -211,8 +218,17 @@ class WandIO:
                     callback(event)
 
                     intterupt_hold_delay = 0.05
-                    while gpio_line.get_value() == 1:
-                        time.sleep(intterupt_hold_delay)
+                    button_press_time = 0
+                    # Uncomment the following lines to check button press duration
+                    # intterupt_hold_delay = 0.05
+                    # button_press_time = 0
+                    # time.sleep(0.1)
+                    # while gpio_line.get_value() == 0:
+                    #     time.sleep(intterupt_hold_delay)
+                    #     button_press_time += intterupt_hold_delay
+                    #     if button_press_time > 2:  # Adjust the threshold as needed (3 seconds here)
+                    #         print("Button pressed for more than 3 seconds")
+
 
                     if chip_label == "mcp" and gpio_list[0] in self.mcp_gpio_lines:
                         self.mcp_gpio_lines.pop(gpio_list[0])
@@ -221,7 +237,7 @@ class WandIO:
 
                     gpio_line.release()
                     time.sleep(debounce)
-                    self.configure_interrupt(chip_label, gpio_list, debounce, callback)
+                    self.configure_interrupt(chip_label, gpio_list, debounce, rising_or_falling, callback)
                     break
 
         thread = threading.Thread(target=interrupt_thread)
