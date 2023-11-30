@@ -3,3 +3,7 @@
 set -e
 
 cp /usr/local/lib/wand/iolib/eepromLib/at24c512.dtbo /boot/overlays/at24c512.dtbo
+
+# install python requirements
+
+pip install -r /usr/local/lib/wand/iolib/requirements.txt

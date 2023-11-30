@@ -1,0 +1,7 @@
+pylint
+gpiozero
+adafruit-blinka
+adafruit-circuitpython-neopixel
+eeprom
+PySensors
+adafruit-circuitpython-lsm6ds
