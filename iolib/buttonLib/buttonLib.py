@@ -30,7 +30,7 @@ class Button:
             self.wand.configure_interrupt(chip_label="mcp", gpio_list=[3, "button2"], callback=callback)
         elif button == "onoff_button":
             # Interrupt handler for on/off ic (max16150)
-            self.wand.configure_interrupt(chip_label="rpi", gpio_list=[27, "on_off_ic"], callback=callback)
+            self.wand.configure_interrupt(chip_label="rpi", gpio_list=[27, "on_off_ic"], debounce=0.1, rising_or_falling=0, callback=callback)
         else:
             raise Exception(f"Button name input incorrect, received {button}")
 
@@ -60,9 +60,13 @@ if __name__ == "__main__":
     def int_callback(event: gpiod.LineEvent) -> None:
         print("interrupt")
 
+    def onoff_callback(event: gpiod.LineEvent) -> None:
+        print("interrupt_onoff")
+
     button = Button()
     button.set_button_interrupt(callback=int_callback, button="front_button1")
     button.set_button_interrupt(callback=int_callback, button="front_button2")
+    button.set_button_interrupt(callback=onoff_callback, button="onoff_button")
     # button.wand.set_output("mcp", 1, 1)
 
     while True:
