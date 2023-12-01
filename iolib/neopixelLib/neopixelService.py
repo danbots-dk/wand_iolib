@@ -2,13 +2,13 @@
 '''
 Service that handles requests from the user multiple different clients.
 '''
-from neopixelLib import WandLed
+
 import zmq
 import json
 from typing import Dict, Optional
 from sys import path
 path.append("/usr/local/lib/wand")
-
+from neopixelLib import WandLed
 
 class NeopixelService:
     def __init__(self):
