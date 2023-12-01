@@ -1,5 +1,9 @@
 #!/bin/python
 
+''' 
+This library provides an API for the user to interact with all the neopixel LEDs connected to the RPi.
+'''
+
 import zmq
 import json
 from typing import Optional

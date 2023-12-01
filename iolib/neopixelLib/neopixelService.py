@@ -1,5 +1,7 @@
 #/bin/python3
-
+'''
+Service that handles requests from the user multiple different clients.
+'''
 from neopixelLib import WandLed
 import zmq
 import json
