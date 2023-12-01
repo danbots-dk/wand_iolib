@@ -1,3 +1,5 @@
+#/bin/python3
+
 from neopixelLib import WandLed
 import zmq
 import json

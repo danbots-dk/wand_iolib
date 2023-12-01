@@ -12,9 +12,7 @@ class RGBLED:
         Args:
             client_name (str): The name of the client (default is "client1").
         """
-        self.context = zmq.Context()
         self.client_name = client_name
-        self.socket = self.context.socket(zmq.PUSH)
 
     def _send_message(self, message: dict) -> None:
         """
@@ -23,6 +21,8 @@ class RGBLED:
         Args:
             message (dict): The message to be sent.
         """
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.PUSH)
         message = json.dumps(message)
         message = message.encode()
         self.socket.connect("tcp://localhost:5555")
@@ -100,7 +100,7 @@ class RGBLED:
         }
         self._send_message(msg)
 
-    def close(self) -> None:
+    def close_led(self) -> None:
         """
         Closes the RGBLED by sending a close message.
         """
@@ -113,6 +113,15 @@ class RGBLED:
         }
         self._send_message(msg)
 
+
 if __name__ == "__main__":
+    import time
     led = RGBLED()
     led.blink_3(0)
+
+    time.sleep(3)
+    led.blink_3(0)
+    time.sleep(0.1)
+    led.set_button_led(1,0,0,0)
+    time.sleep(0.1)
+    #led.close()

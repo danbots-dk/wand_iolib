@@ -1,0 +1,12 @@
+[Unit]
+Description=neoPixel service
+
+[Service]
+ExecStart=/bin/python3 /usr/local/lib/wand/iolib/neopixelLib/neopixelService.py
+WorkingDirectory=/usr/local/lib/wand/iolib/neopixelLib/
+StandardOutput=inherit
+StandardError=inherit
+User=root
+
+[Install]
+WantedBy=multi-user.target
