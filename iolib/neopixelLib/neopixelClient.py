@@ -7,6 +7,8 @@ This library provides an API for the user to interact with all the neopixel LEDs
 import zmq
 import json
 from typing import Optional
+from sys import path
+path.append("/usr/local/lib/wand")
 
 class RGBLED:
     def __init__(self, client_name: str = "client1"):
