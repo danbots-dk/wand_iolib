@@ -122,6 +122,7 @@ class RGBLED:
 if __name__ == "__main__":
     import time
     led = RGBLED()
+    led.blink_3(1)
     led.blink_3(0)
 
     time.sleep(3)
