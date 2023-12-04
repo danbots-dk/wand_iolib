@@ -232,7 +232,6 @@ class WandIO:
                             time.sleep(0.1)
                             if hold_time > 3.0:
                                 hold()
-                                print("shutting down")
 
                     if chip_label == "mcp" and gpio_list[0] in self.mcp_gpio_lines:
                         self.mcp_gpio_lines.pop(gpio_list[0])

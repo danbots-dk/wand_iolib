@@ -19,7 +19,7 @@ class Button:
 
         Args:
             callback (Callable[[gpiod.LineEvent], None]): The callback function to handle the interrupt.
-            longPress_callback (Callable): Callback function to handle long press
+            longPress_callback (Callable): Callback function to handle long press.
             button (str): The button identifier ("front_top", "front_button", or "onoff_button").
         """
 
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         print("interrupt_onoff")
 
     def hold():
-        print("holding")
+        print("holding123")
 
     button = Button()
     #button.set_button_interrupt(callback=int_callback, button="front_button1")
