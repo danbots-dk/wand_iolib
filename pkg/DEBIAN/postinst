@@ -7,7 +7,7 @@ cp /usr/local/lib/wand/iolib/eepromLib/at24c512.dtbo /boot/overlays/at24c512.dtb
 
 # neopixel as a service
 cp /usr/local/lib/wand/iolib/neopixelLib/neopixelService.service /lib/systemd/system/neopixelService.service
-systemctl start neopixelService.service
+systemctl enable neopixelService.service
 
 # install python requirements
 pip install -r /usr/local/lib/wand/iolib/requirements.txt
