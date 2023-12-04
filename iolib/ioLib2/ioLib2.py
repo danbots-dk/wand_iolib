@@ -181,7 +181,7 @@ class WandIO:
         gpio_list: List[Union[int, str]],
         debounce: float = 0.1,
         rising_or_falling: int = 1,
-        hold: int = 0,
+        hold: Callable = None,
         callback: Optional[Callable[[gpiod.LineEvent], None]] = None
     ) -> Optional[int]:
         """
@@ -192,7 +192,7 @@ class WandIO:
             gpio_list (List[Union[int, str]]): List containing pin number and consumer name.
             debounce (float): Debounce time in seconds.
             rising_or_falling: 1 for rising trigger, 0 for falling
-            hold: 0 only short click, 1 registers press > 3s
+            hold: If func is provided, func will be called after 3s hold time
             callback (Optional[Callable[[gpiod.LineEvent], None]]): Callback function to handle the interrupt.
 
         Returns:
@@ -225,12 +225,13 @@ class WandIO:
                     gpio_line.event_read()
                     callback(event)
 
-                    if hold and self.read_input("rpi", 26) == 0:
+                    if hold != None and self.read_input("rpi", 26) == 0:
                         hold_time = 0
                         while self.read_input("rpi", 26) == 0:
                             hold_time = hold_time+0.1
                             time.sleep(0.1)
                             if hold_time > 3.0:
+                                hold()
                                 print("shutting down")
 
                     if chip_label == "mcp" and gpio_list[0] in self.mcp_gpio_lines:
