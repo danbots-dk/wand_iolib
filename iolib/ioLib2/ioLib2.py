@@ -225,6 +225,8 @@ class WandIO:
                     gpio_line.event_read()
                     callback(event)
 
+                    # long press detection
+                    # Works only for shutdown right now
                     if hold != None and self.read_input("rpi", 26) == 0:
                         hold_time = 0
                         while self.read_input("rpi", 26) == 0:
