@@ -242,7 +242,7 @@ class WandIO:
 
                     gpio_line.release()
                     time.sleep(debounce)
-                    self.configure_interrupt(chip_label, gpio_list, debounce, rising_or_falling, hold, callback)
+                    self.configure_interrupt(chip_label=chip_label, gpio_list=gpio_list, debounce=debounce, rising_or_falling=rising_or_falling, hold=hold, hold_time=hold_time, callback=callback)
                     break
 
         thread = threading.Thread(target=interrupt_thread)
