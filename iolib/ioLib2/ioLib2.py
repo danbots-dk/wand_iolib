@@ -34,13 +34,6 @@ class WandIO:
 
         self.mcp_gpio_lines = {} 
         self.rpi_gpio_lines = {}
-        
-        # initialize pin state
-        self.configure_output("mcp", gpio_list=[1, "button_reset"])
-        self.set_output("mcp", 1, 1)
-
-
-        self.configure_input("rpi", gpio_list=[26, "bootloader"])
 
 
     def configure_input(self, chip_label: str, gpio_list: List[Union[int, str]]) -> Optional[int]:
@@ -182,6 +175,7 @@ class WandIO:
         debounce: float = 0.1,
         rising_or_falling: int = 1,
         hold: Callable = None,
+        hold_time: float = 3,
         callback: Optional[Callable[[gpiod.LineEvent], None]] = None
     ) -> Optional[int]:
         """
@@ -193,6 +187,7 @@ class WandIO:
             debounce (float): Debounce time in seconds.
             rising_or_falling: 1 for rising trigger, 0 for falling
             hold: If func is provided, func will be called after 3s hold time
+            hold_time: time until hold func is envoked
             callback (Optional[Callable[[gpiod.LineEvent], None]]): Callback function to handle the interrupt.
 
         Returns:
@@ -227,12 +222,12 @@ class WandIO:
 
                     # long press detection
                     # Works only for shutdown right now
-                    if hold != None and self.read_input("rpi", 26) == 0:
-                        hold_time = 0
-                        while self.read_input("rpi", 26) == 0:
-                            hold_time = hold_time+0.1
+                    if hold != None and (self.read_input("rpi", 26) == 0 or self.read_input("mcp", gpio_list[0]) == 1):
+                        hold_time_tresh = 0
+                        while self.read_input("rpi", 26) == 0 or self.read_input("mcp", gpio_list[0]) == 1:
+                            hold_time_tresh = hold_time_tresh+0.1
                             time.sleep(0.1)
-                            if hold_time > 3.0:
+                            if hold_time_tresh > hold_time:
                                 hold()
 
                     if chip_label == "mcp" and gpio_list[0] in self.mcp_gpio_lines:
@@ -242,7 +237,7 @@ class WandIO:
 
                     gpio_line.release()
                     time.sleep(debounce)
-                    self.configure_interrupt(chip_label, gpio_list, debounce, rising_or_falling, hold, callback)
+                    self.configure_interrupt(chip_label, gpio_list, debounce, rising_or_falling, hold, hold_time, callback)
                     break
 
         thread = threading.Thread(target=interrupt_thread)
