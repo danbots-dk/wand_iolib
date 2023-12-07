@@ -11,27 +11,30 @@ class Button:
         Initializes the Button class with a WandIO instance.
         """
         self.wand = WandIO()
+        self.wand.configure_output("mcp", gpio_list=[1, "button_reset"])
         self.reset_button()
 
-    def set_button_interrupt(self, callback: Callable[[gpiod.LineEvent], None], longPress_callback: Callable, button: str) -> None:
+
+    def set_button_interrupt(self, callback: Callable[[gpiod.LineEvent], None], longPress_callback: Callable, hold_time: float, button: str) -> None:
         """
         Sets up an interrupt for the specified button.
 
         Args:
             callback (Callable[[gpiod.LineEvent], None]): The callback function to handle the interrupt.
             longPress_callback (Callable): Callback function to handle long press.
+            hold_time (float): time until hold func is envoked
             button (str): The button identifier ("front_top", "front_button", or "onoff_button").
         """
 
         if button == "front_button1":
             # Interrupt handler for button1, callback runs in a separate thread 
-            self.wand.configure_interrupt(chip_label="mcp", gpio_list=[2, "button1"], rising_or_falling=0, hold=longPress_callback, callback=callback)
+            self.wand.configure_interrupt(chip_label="mcp", gpio_list=[2, "button1"], rising_or_falling=1, hold=longPress_callback, hold_time=hold_time, callback=callback)
         elif button == "front_button2":
             # Interrupt handler for button2, callback runs in a separate thread    
-            self.wand.configure_interrupt(chip_label="mcp", gpio_list=[3, "button2"], rising_or_falling=0, hold=longPress_callback, callback=callback)
+            self.wand.configure_interrupt(chip_label="mcp", gpio_list=[3, "button2"], rising_or_falling=1, hold=longPress_callback, hold_time=hold_time, callback=callback)
         elif button == "onoff_button":
             # Interrupt handler for on/off ic (max16150)
-            self.wand.configure_interrupt(chip_label="rpi", gpio_list=[27, "on_off_ic"], debounce=0.1, rising_or_falling=0, hold=longPress_callback, callback=callback)
+            self.wand.configure_interrupt(chip_label="rpi", gpio_list=[27, "on_off_ic"], debounce=0.1, rising_or_falling=0, hold=longPress_callback, hold_time=hold_time, callback=callback)
         else:
             raise Exception(f"Button name input incorrect, received {button}")
 
@@ -41,6 +44,8 @@ class Button:
         """
         Resets the button by toggling its output state.
         """
+        # initialize pin state
+
         self.wand.set_output("mcp", 1, 0)
         time.sleep(0.01)
         self.wand.set_output("mcp", 1, 1)
@@ -68,11 +73,13 @@ if __name__ == "__main__":
 
     button = Button()
     #button.set_button_interrupt(callback=int_callback, button="front_button1")
-    button.set_button_interrupt(callback=int_callback, longPress_callback=None, button="front_button2")
-    button.set_button_interrupt(callback=onoff_callback,longPress_callback=hold, button="onoff_button")
+    button.set_button_interrupt(callback=int_callback, longPress_callback=hold, hold_time = 0.2, button="front_button1")
+    button.set_button_interrupt(callback=onoff_callback,longPress_callback=hold, hold_time = 2, button="onoff_button")
     # button.wand.set_output("mcp", 1, 1)
 
     while True:
         reset = input("press enter to reset")
         button.reset_button()
+        #wand = WandIO()
+        #print(wand.read_input("mcp", 2))
         time.sleep(0.1)
