@@ -1,7 +1,7 @@
 #
 # makefile for iolib
 #
-VERSION=1.0.5-3
+VERSION=1.0.6-2
 PKG_NAME=danbots-wand-iolib-$(VERSION)
 USR_LOCAL=/usr/local/lib/wand
 
@@ -20,13 +20,15 @@ install: inst_iolib
 deb-pkg:
 	mkdir -p tmp/pkg/usr/local/lib/wand
 	cp -r pkg/* tmp/pkg
-	cp -r iolib/ tmp/pkg/usr/local/lib/wand/
+	cp -r iolib/ tmp/pkg/usr/local/lib/wand/	
 	cp -r test/ tmp/pkg/usr/local/lib/wand/
 	dpkg-deb --build --root-owner-group -Zxz tmp/pkg tmp/$(PKG_NAME).deb
 
 pkg-push:
 	rcp tmp/$(PKG_NAME).deb  danbots:/var/www/apt/simple/pool/wand/
 	rsh danbots /var/www/apt/simple/scan
+
+apt: deb-pkg pkg-push
 
 clean:
 	rm -rf tmp
