@@ -15,7 +15,7 @@ class Button:
         self.reset_button()
 
 
-    def set_button_interrupt(self, callback: Callable[[gpiod.LineEvent], None], longPress_callback: Callable, hold_time: float, button: str) -> None:
+    def set_button_interrupt(self, callback: Callable[[gpiod.LineEvent], None] = None, longPress_callback: Callable = None, hold_time: float = None, button: str = None) -> None:
         """
         Sets up an interrupt for the specified button.
 
@@ -73,7 +73,8 @@ if __name__ == "__main__":
 
     button = Button()
     #button.set_button_interrupt(callback=int_callback, button="front_button1")
-    button.set_button_interrupt(callback=int_callback, longPress_callback=hold, hold_time = 0.2, button="front_button1")
+    button.set_button_interrupt(callback=int_callback, button="front_button1")
+    button.set_button_interrupt(callback=int_callback, longPress_callback=hold, hold_time = 0.5, button="front_button2")
     button.set_button_interrupt(callback=onoff_callback,longPress_callback=hold, hold_time = 2, button="onoff_button")
     # button.wand.set_output("mcp", 1, 1)
 
