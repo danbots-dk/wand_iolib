@@ -38,7 +38,23 @@ class Button:
         else:
             raise Exception(f"Button name input incorrect, received {button}")
 
-    
+    def release_button(self, button: str = None) -> None:
+        """
+        Releases the specified button or all button if unspecified
+
+        Args:
+            button (str): The button to release, if not specified all buttons are released.
+        """
+        if button == "front_button1":
+            self.wand.release_pin("mcp", 2)
+        elif button == "front_button2":
+            self.wand.release_pin("mcp", 3)
+        elif button == "onoff_button":
+            self.wand.release_pin("rpi", 27)
+        else:
+            self.wand.release_pin("mcp", 2)
+            self.wand.release_pin("mcp", 3)
+            self.wand.release_pin("rpi", 27)
 
     def reset_button(self) -> None:
         """
