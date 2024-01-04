@@ -60,3 +60,9 @@ sed /boot/config.txt -i -e "s/^#gpio=4=dl,op/gpio=4=dl,op/"
 if ! grep -q "^gpio=4=dl,op" /boot/config.txt ; then 
     printf "gpio=4=dl,op\n" >> /boot/config.txt 
 fi
+
+# Define init PWM on pin 12 and 13
+sed /boot/config.txt -i -e "s/^#dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4,clock=10000000/dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4,clock=10000000/"
+if ! grep -q "^dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4,clock=10000000" /boot/config.txt ; then 
+    printf "dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4,clock=10000000\n" >> /boot/config.txt 
+fi
