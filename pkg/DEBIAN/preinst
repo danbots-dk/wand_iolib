@@ -66,3 +66,15 @@ sed /boot/config.txt -i -e "s/^#dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=
 if ! grep -q "^dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4,clock=10000000" /boot/config.txt ; then 
     printf "dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4,clock=10000000\n" >> /boot/config.txt 
 fi
+
+# Map button1 to fn1
+sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="test",keycode=190/dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="test",keycode=190/"
+if ! grep -q "^dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="test",keycode=190" /boot/config.txt ; then 
+    printf "dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="test",keycode=190\n" >> /boot/config.txt 
+fi
+
+# Map button2 to fn2
+sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="test",keycode=191/dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="test",keycode=191/"
+if ! grep -q "^dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="test",keycode=191" /boot/config.txt ; then 
+    printf "dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="test",keycode=191\n" >> /boot/config.txt 
+fi
