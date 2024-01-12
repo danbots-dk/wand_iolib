@@ -17,7 +17,7 @@ class ScanLed:
         stop_pwm(): Stop PWM and close GPIO connections.
     """
 
-    def __init__(self, dias: int = 0, flash: int = 1, frequency: int = 3000):
+    def __init__(self, dias: int = 0, flash: int = 1, frequency: int = 150000):
         """
         Initializes the ScanLed object.
 
@@ -71,14 +71,17 @@ if __name__ == "__main__":
     try:
         import numpy as np
         pwm = ScanLed()
-        for i in np.arange(0.0, 1.0, 0.1):
-            pwm.set_dias(i)  # Set the PWM duty cycle as a percentage (e.g., 50%)
-            time.sleep(0.1)
-        for i in np.arange(1, 0.0, -0.1):
-            pwm.set_dias(i)  # Set the PWM duty cycle as a percentage (e.g., 50%)
-            time.sleep(0.1)
-        pwm.set_dias(0)
-        time.sleep(1)
+        #for i in np.arange(0.0, 0.5, 0.1):
+        #    pwm.set_dias(i)  # Set the PWM duty cycle as a percentage (e.g., 50%)
+        #    time.sleep(0.1)
+        #for i in np.arange(0.5, 0.0, -0.1):
+        #    pwm.set_dias(i)  # Set the PWM duty cycle as a percentage (e.g., 50%)
+        #    time.sleep(0.1)
+
+        pwm.set_dias(0.8)
+        time.sleep(10)
+        pwm.set_dias(0.3)
+        time.sleep(0.1)
         pwm.stop_pwm()
 
     except KeyboardInterrupt:
