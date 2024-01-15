@@ -54,8 +54,8 @@ if __name__ == "__main__":
     import numpy as np
     try:
         pwm = PWM("pwmchip0", 0)  # Change "pwmchip0" and 0 to your specific PWM chip and channel
-        pwm.set_frequency(2000)  # Set the PWM frequency in Hertz (e.g., 2000 Hz)
-        pwm.set_duty_cycle(1)
+        pwm.set_frequency(150000)  # Set the PWM frequency in Hertz (e.g., 2000 Hz)
+        pwm.set_duty_cycle(0.8)
         pwm.pwm_enable(1)
         time.sleep(2)
         for i in np.arange(0.0, 1.0, 0.1):

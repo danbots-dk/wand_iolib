@@ -1,3 +1,5 @@
+from sys import path
+path.append("/usr/local/lib/wand/iolib")
 from sysfsPWM import PWM
 
 import time
@@ -78,7 +80,7 @@ if __name__ == "__main__":
         #    pwm.set_dias(i)  # Set the PWM duty cycle as a percentage (e.g., 50%)
         #    time.sleep(0.1)
 
-        pwm.set_dias(0.8)
+        pwm.set_dias(0.9)
         time.sleep(10)
         pwm.set_dias(0.3)
         time.sleep(0.1)
