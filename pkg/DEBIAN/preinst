@@ -60,3 +60,10 @@ sed /boot/config.txt -i -e "s/^#gpio=4=dl,op/gpio=4=dl,op/"
 if ! grep -q "^gpio=4=dl,op" /boot/config.txt ; then 
     printf "gpio=4=dl,op\n" >> /boot/config.txt 
 fi
+
+# Define bootloader pin state
+sed /boot/config.txt -i -e "s/^#gpio=4=dl,op/gpio=4=dl,op/"
+if ! grep -q "^gpio=4=dl,op" /boot/config.txt ; then 
+    printf "gpio=4=dl,op\n" >> /boot/config.txt 
+fi
+
