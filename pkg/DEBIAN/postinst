@@ -5,6 +5,9 @@ set -e
 # Eeprom
 cp /usr/local/lib/wand/iolib/eepromLib/at24c512.dtbo /boot/overlays/at24c512.dtbo
 
+# Custom gpio-key
+cp /usr/local/lib/wand/iolib/buttonLib/gpio-key-mtch1010.dtbo /boot/overlays/gpio-key-mtch1010.dtbo
+
 # neopixel as a service
 cp /usr/local/lib/wand/iolib/neopixelLib/neopixelService.service /lib/systemd/system/neopixelService.service
 systemctl enable neopixelService.service

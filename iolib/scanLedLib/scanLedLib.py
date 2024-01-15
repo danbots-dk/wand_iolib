@@ -1,5 +1,5 @@
-from gpiozero import PWMOutputDevice
-from gpiozero.pins.pigpio import PiGPIOFactory
+from sysfsPWM import PWM
+
 import time
 
 class ScanLed:
@@ -17,7 +17,7 @@ class ScanLed:
         stop_pwm(): Stop PWM and close GPIO connections.
     """
 
-    def __init__(self, dias: int = 12, flash: int = 13, frequency: int = 3000):
+    def __init__(self, dias: int = 0, flash: int = 1, frequency: int = 3000):
         """
         Initializes the ScanLed object.
 
@@ -26,14 +26,12 @@ class ScanLed:
             flash (int): GPIO pin number for the 'flash' LED.
             frequency (int): PWM frequency in Hertz.
         """
-        self.dias = dias
-        self.flash = flash
-        self.frequency = frequency
+        self.dias = PWM("pwmchip0", dias)
+        self.dias.set_frequency(frequency)
 
-        # Initialize PWM devices
-        factory = PiGPIOFactory()
-        self.pwm1 = PWMOutputDevice(self.dias, frequency=self.frequency, pin_factory=factory)
-        self.pwm2 = PWMOutputDevice(self.flash, frequency=self.frequency, pin_factory=factory)
+        self.flash = PWM("pwmchip0", flash)        
+        self.flash.set_frequency(frequency)
+
 
     def set_dias(self, duty_cycle: float):
         """
@@ -42,7 +40,11 @@ class ScanLed:
         Args:
             duty_cycle (float): Duty cycle value between 0.0 and 1.0.
         """
-        self.pwm1.value = duty_cycle
+        self.dias.set_duty_cycle(duty_cycle)
+        if(duty_cycle==0):
+            self.dias.pwm_enable(0)
+        else:
+            self.dias.pwm_enable(1)
 
     def set_flash(self, duty_cycle: float):
         """
@@ -51,27 +53,38 @@ class ScanLed:
         Args:
             duty_cycle (float): Duty cycle value between 0.0 and 1.0.
         """
-        self.pwm2.value = duty_cycle
+        self.flash.set_duty_cycle(duty_cycle)
+        if(duty_cycle==0):
+            self.flash.pwm_enable(0)
+        else:
+            self.flash.pwm_enable(1)
 
     def stop_pwm(self):
         """Stop PWM and close GPIO connections."""
-        self.pwm1.close()
-        self.pwm2.close()
+        self.set_dias(0)
+        self.set_flash(0)
+        self.dias.unexport_pwm_channel()
+        self.flash.unexport_pwm_channel()
+        
 
 if __name__ == "__main__":
     try:
-        pwm_controller = ScanLed()
-        pwm_controller.set_dias(duty_cycle=0.5)
-        pwm_controller.set_flash(duty_cycle=0.5)
-
-        # Run your PWM-controlled code here
-        time.sleep(10)  # Run for 10 seconds
-
-        pwm_controller.set_dias(duty_cycle=0.75)
-        pwm_controller.set_flash(duty_cycle=0.25)
-        time.sleep(5)  # Run for an additional 5 seconds
+        import numpy as np
+        pwm = ScanLed()
+        for i in np.arange(0.0, 1.0, 0.1):
+            pwm.set_dias(i)  # Set the PWM duty cycle as a percentage (e.g., 50%)
+            time.sleep(0.1)
+        for i in np.arange(1, 0.0, -0.1):
+            pwm.set_dias(i)  # Set the PWM duty cycle as a percentage (e.g., 50%)
+            time.sleep(0.1)
+        pwm.set_dias(0)
+        time.sleep(1)
+        pwm.stop_pwm()
 
     except KeyboardInterrupt:
         pass
     finally:
-        pwm_controller.stop_pwm()
+        try:
+            pwm.stop_pwm()
+        except:
+            print("PWM probably already destroyed")
