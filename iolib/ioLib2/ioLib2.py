@@ -173,7 +173,7 @@ class WandIO:
         chip_label: str,
         gpio_list: List[Union[int, str]],
         debounce: float = 0.1,
-        rising_or_falling: int = 1,
+        rising_or_falling: int = 0,
         hold: Callable = None,
         hold_time: float = 3,
         callback: Optional[Callable[[gpiod.LineEvent], None]] = None
