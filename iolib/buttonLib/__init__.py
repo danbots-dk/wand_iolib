@@ -1,1 +1,1 @@
-from .buttonLib_legacy import Button
+from .buttonLib import Button
