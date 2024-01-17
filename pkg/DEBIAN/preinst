@@ -67,14 +67,21 @@ if ! grep -q "^dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4,clock=10000000"
     printf "dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4,clock=10000000\n" >> /boot/config.txt 
 fi
 
-# Map button1 to fn1
-sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="test",keycode=190/dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="test",keycode=190/"
-if ! grep -q "^dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="test",keycode=190" /boot/config.txt ; then 
-    printf "dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="test",keycode=190\n" >> /boot/config.txt 
+# Map on/off to 0x102
+sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=0x102/dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=0x102/"
+if ! grep -q "^dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=0x102" /boot/config.txt ; then 
+    printf "dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=0x102\n" >> /boot/config.txt 
 fi
 
-# Map button2 to fn2
-sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="test",keycode=191/dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="test",keycode=191/"
-if ! grep -q "^dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="test",keycode=191" /boot/config.txt ; then 
-    printf "dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="test",keycode=191\n" >> /boot/config.txt 
+# Map button1 to 0x100
+sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="top_button",keycode=0x100/dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="top_button",keycode=0x100/"
+if ! grep -q "^dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="top_button",keycode=0x100" /boot/config.txt ; then 
+    printf "dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="top_button",keycode=0x100\n" >> /boot/config.txt 
 fi
+
+# Map button2 to 0x101
+sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_button",keycode=0x101/dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_button",keycode=0x101/"
+if ! grep -q "^dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_button",keycode=0x101" /boot/config.txt ; then 
+    printf "dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_button",keycode=0x101\n" >> /boot/config.txt 
+fi
+
