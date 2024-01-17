@@ -1,1 +1,1 @@
-cmd_/home/peter/cap1293/cap12xx_v2/Module.symvers :=  sed 's/ko$$/o/'  /home/peter/cap1293/cap12xx_v2/modules.order | scripts/mod/modpost -m -a    -o /home/peter/cap1293/cap12xx_v2/Module.symvers -e -i Module.symvers -T - 
+cmd_/home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/Module.symvers :=  sed 's/ko$$/o/'  /home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/modules.order | scripts/mod/modpost -m -a    -o /home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/Module.symvers -e -i Module.symvers -T - 
