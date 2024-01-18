@@ -1708,70 +1708,6 @@
 				phandle = <0xf3>;
 				reg = <0x48>;
 			};
-
-			mux@70 {
-				compatible = "nxp,pca9548";
-				#address-cells = <0x01>;
-				#size-cells = <0x00>;
-				phandle = <0xf8>;
-				reg = <0x70>;
-
-				i2c@0 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x100>;
-					reg = <0x00>;
-				};
-
-				i2c@7 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x107>;
-					reg = <0x07>;
-				};
-
-				i2c@5 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x105>;
-					reg = <0x05>;
-				};
-
-				i2c@3 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x103>;
-					reg = <0x03>;
-				};
-
-				i2c@1 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x101>;
-					reg = <0x01>;
-				};
-
-				i2c@6 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x106>;
-					reg = <0x06>;
-				};
-
-				i2c@4 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x104>;
-					reg = <0x04>;
-				};
-
-				i2c@2 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x102>;
-					reg = <0x02>;
-				};
-			};
 		};
 
 		interrupt-controller@7ef00100 {
@@ -2497,14 +2433,14 @@
 		phandle = <0x3c>;
 		os_prefix;
 		overlay_prefix = [6f 76 65 72 6c 61 79 73 2f];
-		kaslr-seed = <0x39b4d043 0xeede23b6>;
+		kaslr-seed = <0x9aa7d39d 0x77e38590>;
 
 		bootloader {
 			version = "78ec57468d6bb1dd7051698539ec814d22a98c64";
 			capabilities = <0x7f>;
 			boot-mode = <0x01>;
 			partition = <0x00>;
-			rsts = <0x20>;
+			rsts = <0x1000>;
 			build-timestamp = <0x61a8a4d9>;
 			tryboot = <0x00>;
 			update-timestamp = <0x00>;

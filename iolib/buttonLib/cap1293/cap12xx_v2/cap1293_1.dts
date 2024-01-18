@@ -7,7 +7,7 @@
 / {
         compatible = "brcm,bcm2835";
         fragment@0 {
-                target = <0x100>;
+                target = <0x101>; //phandle for i2c channel 1 on pca954x
                 __overlay__{
                         status = "okay";
                         cap1293: cap1293@28 {
