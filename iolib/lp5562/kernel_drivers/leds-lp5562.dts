@@ -3,7 +3,7 @@
 
 / {
     fragment@0 {
-        target = <&i2c1>; // Use appropriate target for your specific device tree
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@0"; //phandle for i2c channel 1 on pca954x
 
         __overlay__ {
             led-controller@30 {
