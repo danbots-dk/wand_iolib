@@ -16,6 +16,13 @@ __pycache__/
 # C extensions
 *.so
 
+# kernel compile files
+*.cmd
+*.o
+*.symvers
+*.order
+*.d
+
 # Distribution / packaging
 .Python
 build/
