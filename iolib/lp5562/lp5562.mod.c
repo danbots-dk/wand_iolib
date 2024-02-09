@@ -64,7 +64,6 @@ __used __section("__versions") = {
 	{ 0xe2f55851, "of_get_property" },
 	{ 0x668b595, "_kstrtoul" },
 	{ 0x7c9a7371, "clk_prepare" },
-	{ 0x92997ed8, "_printk" },
 	{ 0x3ea1b6e4, "__stack_chk_fail" },
 	{ 0x85256c96, "devres_release" },
 	{ 0x25aa45a0, "_dev_info" },
@@ -106,4 +105,4 @@ MODULE_ALIAS("i2c:lp5562");
 MODULE_ALIAS("of:N*T*Cti,lp5562");
 MODULE_ALIAS("of:N*T*Cti,lp5562C*");
 
-MODULE_INFO(srcversion, "3E50BE0C52B9B8A156D27E8");
+MODULE_INFO(srcversion, "9198F0B52C10B9B2AE32AAB");
