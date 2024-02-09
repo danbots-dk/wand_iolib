@@ -123,29 +123,85 @@
 
 
     fragment@107 {
-        target-path = "/soc/i2c@7e804000/mux@70/i2c@1";
-        __overlay__{
-            #address-cells = <1>;
-            #size-cells = <0>;
-            status = "okay";
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@0"; //phandle for i2c channel 1 on pca954x
 
-            lp5562: lp5562@30 {
-                compatible = "ti,lp5562";
-                reg = <0x30>; // I2C address of the LP5562 device
+        __overlay__ {
+            led-controller@30 {
                 #address-cells = <1>;
                 #size-cells = <0>;
-                status = "okay";
+                compatible = "ti,lp5562";
+                reg = <0x30>;
+                clock-mode = <0>;
+                pwr-sel = <3>;	/* D1~9 connected to VOUT */
+
+                led@0 {
+                    reg = <0>;
+                    chan-name = "red_0";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <0>; // 0 red, 1 green, 2 blue
+                };
+
+                led@1 {
+                    reg = <1>;
+                    chan-name = "green_0";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <1>; // 0 red, 1 green, 2 blue
+                };
+
+                led@2 {
+                    reg = <2>;
+                    chan-name = "blue_0";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <2>; // 0 red, 1 green, 2 blue
+                };
+
+
+            
             };
         };
     };
 
     fragment@108 {
-        target = <&gpio>;
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@1"; //phandle for i2c channel 1 on pca954x
+
         __overlay__ {
-            lp5562_reset: lp5562_reset_pin {
-                brcm,pins = <19>; // GPIO pin number for LP5562 reset
-                brcm,function = <0>; // GPIO function (0: input, 1: output)
-                brcm,pull = <0>; // GPIO pull configuration (0: none, 1: pull-down, 2: pull-up)
+            led-controller@30 {
+                #address-cells = <1>;
+                #size-cells = <0>;
+                compatible = "ti,lp5562";
+                reg = <0x30>;
+                clock-mode = <0>;
+                pwr-sel = <3>;	/* D1~9 connected to VOUT */
+
+                led@0 {
+                    reg = <0>;
+                    chan-name = "red_1";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <0>; // 0 red, 1 green, 2 blue
+                };
+
+                led@1 {
+                    reg = <1>;
+                    chan-name = "green_1";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <1>; // 0 red, 1 green, 2 blue
+                };
+
+                led@2 {
+                    reg = <2>;
+                    chan-name = "blue_1";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <2>; // 0 red, 1 green, 2 blue
+                };
+
+
+            
             };
         };
     };
@@ -185,10 +241,6 @@
                   
         int_pin_1 = <&cap1293_1>, "interrupts:0",
                   <&cap1293_pins_1>, "brcm,pins:0";
-
-        lp5562_reset = <&lp5562_reset>, "brcm,pins:0",
-                       <&lp5562_reset>, "brcm,function:0",
-                       <&lp5562_reset>, "brcm,pull:0";
 
     };
 
