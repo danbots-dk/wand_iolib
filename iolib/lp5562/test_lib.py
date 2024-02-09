@@ -3,10 +3,10 @@ import time
 import threading
 
 class SysLED:
-    def __init__(self, button_sel=0):
-        self.red = f"/sys/class/leds/red/"
-        self.green = f"/sys/class/leds/green/"
-        self.blue = f"/sys/class/leds/blue/"
+    def __init__(self, channel=0):
+        self.red = f"/sys/class/leds/red_{channel}/"
+        self.green = f"/sys/class/leds/green_{channel}/"
+        self.blue = f"/sys/class/leds/blue_{channel}/"
 
         self.color = "red"
         self.blink_thread = None
@@ -53,7 +53,7 @@ class SysLED:
 
 # Example usage:
 if __name__ == "__main__":
-    led = SysLED()
+    led = SysLED(channel=0)
     led.blink(r=255, g=200, b=0, on_time=0.5, off_time=0.5, n=5)
     print("sup")
     time.sleep(8)
