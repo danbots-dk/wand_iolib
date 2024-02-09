@@ -22,6 +22,8 @@ __pycache__/
 *.symvers
 *.order
 *.d
+*.mod
+*.ko
 
 # Distribution / packaging
 .Python
