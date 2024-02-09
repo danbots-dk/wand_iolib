@@ -898,6 +898,13 @@
 				brcm,function = <0x04>;
 			};
 
+			cap1293_pins {
+				brcm,pins = <0x11>;
+				phandle = <0x115>;
+				brcm,pull = <0x00>;
+				brcm,function = <0x00>;
+			};
+
 			uart5_gpio12 {
 				phandle = <0x9a>;
 
@@ -1710,66 +1717,24 @@
 			};
 
 			mux@70 {
-				compatible = "nxp,pca9548";
+				compatible = "nxp,pca9542";
 				#address-cells = <0x01>;
 				#size-cells = <0x00>;
-				phandle = <0x117>;
+				phandle = <0x116>;
 				reg = <0x70>;
 
 				i2c@0 {
 					#address-cells = <0x01>;
-					label = "i2c_mux_0";
 					#size-cells = <0x00>;
+					phandle = <0x11b>;
 					reg = <0x00>;
-				};
-
-				i2c@7 {
-					#address-cells = <0x01>;
-					label = "i2c_mux_7";
-					#size-cells = <0x00>;
-					reg = <0x07>;
-				};
-
-				i2c@5 {
-					#address-cells = <0x01>;
-					label = "i2c_mux_5";
-					#size-cells = <0x00>;
-					reg = <0x05>;
-				};
-
-				i2c@3 {
-					#address-cells = <0x01>;
-					label = "i2c_mux_3";
-					#size-cells = <0x00>;
-					reg = <0x03>;
 				};
 
 				i2c@1 {
 					#address-cells = <0x01>;
-					label = "i2c_mux_1";
 					#size-cells = <0x00>;
+					phandle = <0x11c>;
 					reg = <0x01>;
-				};
-
-				i2c@6 {
-					#address-cells = <0x01>;
-					label = "i2c_mux_6";
-					#size-cells = <0x00>;
-					reg = <0x06>;
-				};
-
-				i2c@4 {
-					#address-cells = <0x01>;
-					label = "i2c_mux_4";
-					#size-cells = <0x00>;
-					reg = <0x04>;
-				};
-
-				i2c@2 {
-					#address-cells = <0x01>;
-					label = "i2c_mux_2";
-					#size-cells = <0x00>;
-					reg = <0x02>;
 				};
 			};
 		};
@@ -2497,7 +2462,7 @@
 		phandle = <0x3c>;
 		os_prefix;
 		overlay_prefix = [6f 76 65 72 6c 61 79 73 2f];
-		kaslr-seed = <0xd5c4b811 0x2940e6bc>;
+		kaslr-seed = <0x2a5b0c21 0xdd14c0e2>;
 
 		bootloader {
 			version = "78ec57468d6bb1dd7051698539ec814d22a98c64";

@@ -1,0 +1,46 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    fragment@0 {
+        target = <&i2c1>; // Use appropriate target for your specific device tree
+
+        __overlay__ {
+            led-controller@30 {
+                #address-cells = <1>;
+                #size-cells = <0>;
+                compatible = "ti,lp5562";
+                reg = <0x30>;
+                clock-mode = <0>;
+                pwr-sel = <3>;	/* D1~9 connected to VOUT */
+
+                led@0 {
+                    reg = <0>;
+                    chan-name = "red";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <0>; // 0 red, 1 green, 2 blue
+                };
+
+                led@1 {
+                    reg = <1>;
+                    chan-name = "green";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <1>; // 0 red, 1 green, 2 blue
+                };
+
+                led@2 {
+                    reg = <2>;
+                    chan-name = "blue";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <2>; // 0 red, 1 green, 2 blue
+                };
+
+
+            
+            };
+        };
+    };
+};
