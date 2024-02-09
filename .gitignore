@@ -16,6 +16,19 @@ __pycache__/
 # C extensions
 *.so
 
+# Kernel driver compile files
+*.cmd
+*.o
+*.symvers
+*.order
+*.d
+*.mod
+*.ko
+*.mod.c
+
+# dtoverlay compiled files
+*.dtbo
+
 # Distribution / packaging
 .Python
 build/
