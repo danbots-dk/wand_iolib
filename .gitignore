@@ -24,6 +24,7 @@ __pycache__/
 *.d
 *.mod
 *.ko
+*.mod.c
 
 # Distribution / packaging
 .Python
