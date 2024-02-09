@@ -1,0 +1,198 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2835";
+
+    fragment@0 {
+        target = <&i2cbus>;
+        __dormant__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            pca9542: mux@70 {
+                compatible = "nxp,pca9542";
+                reg = <0x70>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                i2c_pca9542_0: i2c@0 {
+                    #address-cells = <1>;
+                    #size-cells = <0>;
+                    reg = <0>;
+                };
+
+                i2c_pca9542_1: i2c@1 {
+                    #address-cells = <1>;
+                    #size-cells = <0>;
+                    reg = <1>;
+                };
+            };
+        };
+    };
+
+    frag100: fragment@100 {
+        target = <&i2c_arm>;
+        i2cbus: __overlay__ {
+            status = "okay";
+        };
+    };
+
+    fragment@101 {
+        target = <&i2c0if>;
+        __dormant__ {
+            status = "okay";
+        };
+    };
+
+    fragment@102 {
+        target = <&i2c0mux>;
+        __dormant__ {
+            status = "okay";
+        };
+    };
+
+    fragment@103 {
+        target = <&gpio>;
+        __overlay__ {
+            cap1293_pins_0: cap1293_pins_0 {
+                brcm,pins = <4>;
+                brcm,function = <0>; /* in */
+                brcm,pull = <0>; /* none */
+            };
+        };
+    };
+
+    fragment@104 {
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@0"; //phandle for i2c channel 1 on pca954x
+        __overlay__{
+            status = "okay";
+            cap1293_0: cap1293_0@28 {
+                compatible = "microchip,cap1293";
+                pinctrl-0 = <&cap1293_pins_0>;
+                pinctrl-names = "default";
+                interrupt-parent = <&gpio>;
+                interrupts = <4 2>;
+                reg = <0x28>;
+                autorepeat;
+                microchip,sensor-gain = <2>;
+                linux,keycodes = <2>,
+                                 <3>,            /* KEY_2 */
+                                 <4>;            /* KEY_3 */           /* KEY_1 */
+                #address-cells = <1>;
+                #size-cells = <0>;
+                status = "okay";
+            };
+        };
+    };
+
+    fragment@105 {
+        target = <&gpio>;
+        __overlay__ {
+            cap1293_pins_1: cap1293_pins_1 {
+                brcm,pins = <4>;
+                brcm,function = <0>; /* in */
+                brcm,pull = <0>; /* none */
+            };
+        };
+    };
+
+    fragment@106 {
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@1"; //phandle for i2c channel 1 on pca954x
+        __overlay__{
+            status = "okay";
+            cap1293_1: cap1293_1@28 {
+                compatible = "microchip,cap1293";
+                pinctrl-0 = <&cap1293_pins_1>;
+                pinctrl-names = "default";
+                interrupt-parent = <&gpio>;
+                interrupts = <4 2>;
+                reg = <0x28>;
+                autorepeat;
+                microchip,sensor-gain = <2>;
+                linux,keycodes = <5>,
+                                 <6>,            /* KEY_2 */
+                                 <7>;            /* KEY_3 */           /* KEY_1 */
+                #address-cells = <1>;
+                #size-cells = <0>;
+                status = "okay";
+            };
+        };
+    };
+
+
+    fragment@107 {
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@1";
+        __overlay__{
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            lp5562: lp5562@30 {
+                compatible = "ti,lp5562";
+                reg = <0x30>; // I2C address of the LP5562 device
+                #address-cells = <1>;
+                #size-cells = <0>;
+                status = "okay";
+            };
+        };
+    };
+
+    fragment@108 {
+        target = <&gpio>;
+        __overlay__ {
+            lp5562_reset: lp5562_reset_pin {
+                brcm,pins = <19>; // GPIO pin number for LP5562 reset
+                brcm,function = <0>; // GPIO function (0: input, 1: output)
+                brcm,pull = <0>; // GPIO pull configuration (0: none, 1: pull-down, 2: pull-up)
+            };
+        };
+    };
+
+    fragment@109 {
+        target = <&i2c_arm>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+
+
+
+    __overrides__ {
+        pca9542 = <0>, "+0";
+
+
+        addr =  <&pca9542>,"reg:0";
+
+        i2c0 = <&frag100>, "target:0=",<&i2c0>,
+                <0>,"+101+102";
+        i2c_csi_dsi = <&frag100>, "target:0=",<&i2c_csi_dsi>,
+                <0>,"+101+102";
+        i2c3 = <&frag100>, "target?=0",
+                <&frag100>, "target-path=i2c3";
+        i2c4 = <&frag100>, "target?=0",
+                <&frag100>, "target-path=i2c4";
+        i2c5 = <&frag100>, "target?=0",
+                <&frag100>, "target-path=i2c5";
+        i2c6 = <&frag100>, "target?=0",
+                <&frag100>, "target-path=i2c6";
+
+
+
+        int_pin_0 = <&cap1293_0>, "interrupts:0",
+                  <&cap1293_pins_0>, "brcm,pins:0";
+                  
+        int_pin_1 = <&cap1293_1>, "interrupts:0",
+                  <&cap1293_pins_1>, "brcm,pins:0";
+
+        lp5562_reset = <&lp5562_reset>, "brcm,pins:0",
+                       <&lp5562_reset>, "brcm,function:0",
+                       <&lp5562_reset>, "brcm,pull:0";
+
+    };
+
+    // aliases {
+    //     i2c_pca9542_0 = &i2c_pca9542_0; // Define alias for i2c_pca9542_0
+    // };
+};

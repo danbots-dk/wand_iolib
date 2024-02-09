@@ -1,0 +1,1 @@
+cmd_/home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/modules.order := {   echo /home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/cap12xx.ko; :; } > /home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/modules.order
