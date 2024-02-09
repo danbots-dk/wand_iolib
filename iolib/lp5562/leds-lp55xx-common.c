@@ -571,7 +571,6 @@ static int lp55xx_parse_common_child(struct device_node *np,
 
 	of_property_read_string(np, "chan-name",
 				&cfg[led_number].name);
-	pr_alert("channel name %s\n", &cfg[led_number].name);
 	of_property_read_u8(np, "led-cur",
 			    &cfg[led_number].led_current);
 	of_property_read_u8(np, "max-cur",
@@ -665,18 +664,14 @@ struct lp55xx_platform_data *lp55xx_of_populate_pdata(struct device *dev,
 	int num_channels;
 	int i = 0;
 	int ret;
-	pr_alert("Inside pdata 1\n");
 	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
 	if (!pdata)
 		return ERR_PTR(-ENOMEM);
-	pr_alert("Inside pdata 2\n");
 	num_channels = of_get_available_child_count(np);
-	pr_alert("Inside pdata, number of channels: %d\n", num_channels);
 	if (num_channels == 0) {
 		dev_err(dev, "no LED channels\n");
 		return ERR_PTR(-EINVAL);
 	}
-	pr_alert("Inside pdata 3\n");
 	cfg = devm_kcalloc(dev, num_channels, sizeof(*cfg), GFP_KERNEL);
 	if (!cfg)
 		return ERR_PTR(-ENOMEM);
@@ -684,7 +679,6 @@ struct lp55xx_platform_data *lp55xx_of_populate_pdata(struct device *dev,
 	pdata->led_config = &cfg[0];
 	pdata->num_channels = num_channels;
 	cfg->max_channel = chip->cfg->max_channel;
-	pr_alert("Inside pdata 4\n");
 	for_each_available_child_of_node(np, child) {
 		ret = lp55xx_parse_logical_led(child, cfg, i);
 		if (ret) {
@@ -693,18 +687,14 @@ struct lp55xx_platform_data *lp55xx_of_populate_pdata(struct device *dev,
 		}
 		i++;
 	}
-	pr_alert("Inside pdata 5\n");
 	of_property_read_string(np, "label", &pdata->label);
 	of_property_read_u8(np, "clock-mode", &pdata->clock_mode);
-	pr_alert("Inside pdata 6\n");
 	pdata->enable_gpiod = devm_gpiod_get_optional(dev, "enable",
 						      GPIOD_ASIS);
 	if (IS_ERR(pdata->enable_gpiod))
 		return ERR_CAST(pdata->enable_gpiod);
-	pr_alert("Inside pdata 7\n");
 	/* LP8501 specific */
 	of_property_read_u8(np, "pwr-sel", (u8 *)&pdata->pwr_sel);
-	pr_alert("Inside pdata return\n");
 	return pdata;
 }
 EXPORT_SYMBOL_GPL(lp55xx_of_populate_pdata);

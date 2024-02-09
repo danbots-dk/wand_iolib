@@ -519,7 +519,6 @@ static int lp5562_probe(struct i2c_client *client,
 	struct lp55xx_led *led;
 	struct lp55xx_platform_data *pdata = dev_get_platdata(&client->dev);
 	struct device_node *np = dev_of_node(&client->dev);
-	pr_alert("Inside lp5562 probe test3\n");
 	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
 	if (!chip)
 		return -ENOMEM;
@@ -531,47 +530,37 @@ static int lp5562_probe(struct i2c_client *client,
 			pdata = lp55xx_of_populate_pdata(&client->dev, np,
 							 chip);
 			if (IS_ERR(pdata)){
-				pr_alert("pdata error\n");
 				return PTR_ERR(pdata);
 				}
 		} else {
-			pr_alert("EINVAL\n");
 			dev_err(&client->dev, "no platform data\n");
 			return -EINVAL;
 		}
 	}
 
-	pr_alert("devm_kcalloc number of channels: %d\n", pdata->num_channels);
 	led = devm_kcalloc(&client->dev,
 			pdata->num_channels, sizeof(*led), GFP_KERNEL);
-	pr_alert("LED\n");
 	if (!led)
 		return -ENOMEM;
 
 	chip->cl = client;
 	chip->pdata = pdata;
-	pr_alert("MUTEX\n");
 	mutex_init(&chip->lock);
 
 	i2c_set_clientdata(client, led);
-	pr_alert("lp55xx_init_device\n");
 	ret = lp55xx_init_device(chip);
-	pr_alert("err_init\n");
 	if (ret)
 		goto err_init;
 
 	ret = lp55xx_register_leds(led, chip);
-	pr_alert("err_out\n");
 	if (ret)
 		goto err_out;
 
 	ret = lp55xx_register_sysfs(chip);
-	pr_alert("err_out sysfs\n");
 	if (ret) {
 		dev_err(&client->dev, "registering sysfs failed\n");
 		goto err_out;
 	}
-	pr_alert("end of probe\n");
 	return 0;
 
 err_out:
