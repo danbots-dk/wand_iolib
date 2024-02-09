@@ -55,6 +55,6 @@ class SysLED:
 if __name__ == "__main__":
     led = SysLED(channel=0)
     led.blink(r=255, g=200, b=0, on_time=0.5, off_time=0.5, n=5)
-    print("sup")
+    print("keep blinking in separate thread")
     time.sleep(8)
     led.stop_blink()
