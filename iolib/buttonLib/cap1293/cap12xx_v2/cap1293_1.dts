@@ -7,7 +7,7 @@
 / {
         compatible = "brcm,bcm2835";
         fragment@0 {
-                target = <0x101>; //phandle for i2c channel 1 on pca954x
+                target = <0x11c>; //phandle for i2c channel 1 on pca954x
                 __overlay__{
                         status = "okay";
                         cap1293: cap1293@28 {
@@ -18,11 +18,11 @@
                                 interrupts = <4 2>;
                                 reg = <0x28>;
                                 autorepeat;
-                                microchip,sensor-gain = <2>;
+                                microchip,sensor-gain = <4>;
 
-                                linux,keycodes = <2>,
-                                                <3>,            /* KEY_2 */
-                                                <4>;            /* KEY_3 */           /* KEY_1 */
+                                linux,keycodes = <5>,
+                                                <6>,            /* KEY_2 */
+                                                <7>;            /* KEY_3 */           /* KEY_1 */
 
 
 
