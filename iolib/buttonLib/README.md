@@ -1,3 +1,20 @@
+## Button API Usage Documentation
+
+This script showcases the usage of the button API using `/dev/input/eventX` devices. It sets up an interrupt that triggers on the selected button, registering press, long press, and release events.
+
+### Function: `read_input_events(button_id, press_callback_function, release_callback_function=None, while_pressed_callback_function=None)`
+
+Sets up an interrupt for a specified button.
+
+#### Parameters:
+- `button_id` (str): Identifier for the button. Possible values are `"front1"`, `"front2"`, or `"onoff"`.
+- `press_callback_function` (function): Callback function to handle press events.
+- `release_callback_function` (function, optional): Callback function to handle release events. Default is `None`.
+- `while_pressed_callback_function` (function, optional): Callback function to run while the button is pressed. Default is `None`.
+
+### Example Usage:
+
+```python
 import evdev
 import threading
 
@@ -87,3 +104,4 @@ if __name__ == "__main__":
 
     # Optionally, wait for user input to keep the program alive
     input("Press Enter to exit...")
+
