@@ -36,7 +36,7 @@ A to do is to implement a calibration on power-on in the cap1293.c driver.
 Once loaded (verified using dmesg), the button input is available via /dev/input/eventX. Consult the button_api_example.py for how to interface with this.
 
 ### EepromLib
-[Eeprom docs](eepromLib/README.md)
+[Eeprom docs](iolib/eepromLib/README.md)
 
 
 
