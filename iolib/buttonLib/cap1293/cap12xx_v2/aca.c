@@ -83,16 +83,16 @@ struct cap11xx_led {
 
 struct cap11xx_priv {
 	struct regmap *regmap;
-struct device *dev;
+	struct device *dev;
 	struct input_dev *idev;
-const struct cap11xx_hw_model *model;
+	const struct cap11xx_hw_model *model;
 	u8 id;
 
 	struct cap11xx_led *leds;
 	int num_leds;
 
 	/* config */
-u8 analog_gain;
+	u8 analog_gain;
 	u8 sensitivity_delta_sense;
 	u8 signal_guard_inputs_mask;
 	u32 thresholds[8];
@@ -173,7 +173,7 @@ static bool cap11xx_volatile_reg(struct device *dev, unsigned int reg)
 	case CAP11XX_REG_SENOR_DELTA(3):
 	case CAP11XX_REG_SENOR_DELTA(4):
 	case CAP11XX_REG_SENOR_DELTA(5):
-			return true;
+		return true;
 	}
 
 	return false;
@@ -187,7 +187,7 @@ static const struct regmap_config cap11xx_regmap_config = {
 	.reg_defaults = cap11xx_reg_defaults,
 
 	.num_reg_defaults = ARRAY_SIZE(cap11xx_reg_defaults),
-	.cache_type = REGCACHE_RBTREE,
+	.cache_type = REGCACHE_MAPLE,
 	.volatile_reg = cap11xx_volatile_reg,
 };
 
@@ -506,17 +506,14 @@ static int cap11xx_init_leds(struct device *dev,
 }
 #endif
 
-static int cap11xx_i2c_probe(struct i2c_client *i2c_client, const struct i2c_device_id *id)
+static int cap11xx_i2c_probe(struct i2c_client *i2c_client)
 {
-	// const struct i2c_device_id *id = i2c_client_get_device_id(i2c_client);
-	pr_alert("new driver test!!");
+	const struct i2c_device_id *id = i2c_client_get_device_id(i2c_client);
 	struct device *dev = &i2c_client->dev;
 	struct cap11xx_priv *priv;
-	struct device_node *node;
 	const struct cap11xx_hw_model *cap;
-	int i, error, irq, gain = 0;
+	int i, error;
 	unsigned int val, rev;
-	u32 gain32;
 
 	if (id->driver_data >= ARRAY_SIZE(cap11xx_devices)) {
 		dev_err(dev, "Invalid device ID %lu\n", id->driver_data);
@@ -535,7 +532,7 @@ static int cap11xx_i2c_probe(struct i2c_client *i2c_client, const struct i2c_dev
 	if (!priv)
 		return -ENOMEM;
 
-priv->dev = dev;
+	priv->dev = dev;
 
 	priv->regmap = devm_regmap_init_i2c(i2c_client, &cap11xx_regmap_config);
 	if (IS_ERR(priv->regmap))
@@ -566,14 +563,14 @@ priv->dev = dev;
 		return error;
 
 	dev_info(dev, "CAP11XX detected, model %s, revision 0x%02x\n",
-id->name, rev);
+			 id->name, rev);
 
 	priv->model = cap;
 	priv->id = id->driver_data;
 
 	dev_info(dev, "CAP11XX device detected, model %s, revision 0x%02x\n",
 		 id->name, rev);
-	
+
 	error = cap11xx_init_keys(priv);
 	if (error)
 		return error;
