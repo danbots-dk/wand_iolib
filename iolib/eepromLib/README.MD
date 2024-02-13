@@ -1,42 +1,156 @@
-# Driver documentation
+## AT24_EEPROM Class Documentation
 
-All drivers are implemented using a .deb package. The following will provide detail on installation and on the individual drivers.
+This class provides an interface for interacting with an EEPROM (Electrically Erasable Programmable Read-Only Memory) chip of the AT24 series over I2C communication protocol.
 
-## Installation
-First compile the package
-   
-    cd wand_iolib
-    make dep-pkg
+### Class: `AT24_EEPROM`
 
-Then install
+#### Constructor: `__init__(i2c_bus: int, i2c_addr: int)`
 
-    sudo dpkg -i tmp/danbots-wand-iolib-x.deb
+Initializes the AT24_EEPROM class.
 
-This should install all necessary packages with no further configuration.
+- `i2c_bus` (int): The I2C bus number.
+- `i2c_addr` (int): The I2C address of the EEPROM.
 
-## Deb package
-### preinst
-preinstall configures all of the various dtoverlays by scanning /boot/config.txt and injecting the overlay configuration if not already present. It does this at the end under [All].
+#### Method: `write_parameter(parameter_name: str, value: str, offset: int) -> Optional[int]`
 
-### postinst
-Copies libraries to /usr/local/lib/wand/iolib/ and overlay files from /usr/local/lib/wand/iolib/ to /boot/overlay in order for them to be available in $PATH and /boot/config.txt respectively.
+Writes a parameter to the EEPROM.
 
-## Libraries
-The .deb package is comprised of multiple individual packages and drives.
+- `parameter_name` (str): The name of the parameter.
+- `value` (str): The value to write.
+- `offset` (int): The offset in the EEPROM memory.
 
-###	buttonLib
-The button library is implemented using kernel drivers. The setting are configured using the .dts overlay file found in iolib/buttonLib/cap1293/cap12xx_v2/cap12xx_pca9542.dts. The following settings can be configured for now:
+Returns:
+- `Optional[int]`: The number of bytes written or None if the write operation fails.
 
- - Pin interrupt (configured via /boot/config.txt)
- - sensor-gain (set to 2)
- - keycodes (semi random values for now..)
+#### Method: `read_parameter(parameter_name: str, size: int, offset: int) -> str`
 
-A to do is to implement a calibration on power-on in the cap1293.c driver.
+Reads a parameter from the EEPROM.
 
-Once loaded (verified using dmesg), the button input is available via /dev/input/eventX. Consult the button_api_example.py for how to interface with this.
+- `parameter_name` (str): The name of the parameter.
+- `size` (int): The size of the parameter.
+- `offset` (int): The offset in the EEPROM memory.
 
-### EepromLib
-link to eeprom docs
+Returns:
+- `str`: The read parameter value.
 
+#### Method: `write_flash_date(flash_date: str) -> Optional[int]`
 
+Writes the flash date to the EEPROM.
 
+- `flash_date` (str): The flash date to write.
+
+Returns:
+- `Optional[int]`: The number of bytes written or None if the write operation fails.
+
+#### Method: `read_flash_date(size: int = 15) -> str`
+
+Reads the flash date from the EEPROM.
+
+- `size` (int): The size of the flash date.
+
+Returns:
+- `str`: The read flash date.
+
+#### Method: `write_software_version(software_version: str) -> Optional[int]`
+
+Writes the software version to the EEPROM.
+
+- `software_version` (str): The software version to write.
+
+Returns:
+- `Optional[int]`: The number of bytes written or None if the write operation fails.
+
+#### Method: `read_software_version(size: int = 15) -> str`
+
+Reads the software version from the EEPROM.
+
+- `size` (int): The size of the software version.
+
+Returns:
+- `str`: The read software version.
+
+#### Method: `write_hardware_version(hardware_version: str) -> Optional[int]`
+
+Writes the hardware version to the EEPROM.
+
+- `hardware_version` (str): The hardware version to write.
+
+Returns:
+- `Optional[int]`: The number of bytes written or None if the write operation fails.
+
+#### Method: `read_hardware_version(size: int = 15) -> str`
+
+Reads the hardware version from the EEPROM.
+
+- `size` (int): The size of the hardware version.
+
+Returns:
+- `str`: The read hardware version.
+
+#### Method: `write_assembly_date(assembly_date: str) -> Optional[int]`
+
+Writes the assembly date to the EEPROM.
+
+- `assembly_date` (str): The assembly date to write.
+
+Returns:
+- `Optional[int]`: The number of bytes written or None if the write operation fails.
+
+#### Method: `read_assembly_date(size: int = 15) -> str`
+
+Reads the assembly date from the EEPROM.
+
+- `size` (int): The size of the assembly date.
+
+Returns:
+- `str`: The read assembly date.
+
+#### Method: `write_unique_id(unique_id: str) -> Optional[int]`
+
+Writes the unique ID to the EEPROM.
+
+- `unique_id` (str): The unique ID to write.
+
+Returns:
+- `Optional[int]`: The number of bytes written or None if the write operation fails.
+
+#### Method: `read_unique_id(size: int = 15) -> str`
+
+Reads the unique ID from the EEPROM.
+
+- `size` (int): The size of the unique ID.
+
+Returns:
+- `str`: The read unique ID.
+
+#### Method: `read_all_parameters(size: int = 15) -> Dict[str, str]`
+
+Reads all parameters from the EEPROM.
+
+- `size` (int): The size of the parameters.
+
+Returns:
+- `Dict[str, str]`: A dictionary containing parameter names and their respective values.
+
+### Example Usage:
+
+```python
+from eeprom import AT24_EEPROM
+
+try:
+    # Initialize EEPROM
+    eeprom = AT24_EEPROM(1, 0x50)
+
+    # Write parameters
+    eeprom.write_flash_date("2023-11-21")
+    eeprom.write_software_version("v1.0.0")
+    eeprom.write_hardware_version("HW-123")
+    eeprom.write_assembly_date("2023-11-20")
+    eeprom.write_unique_id("ABC123")
+
+    # Read all parameters
+    parameters = eeprom.read_all_parameters()
+    print("Parameters:", parameters)
+
+finally:
+    pass
