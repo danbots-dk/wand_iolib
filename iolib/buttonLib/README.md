@@ -1,3 +1,13 @@
+The button library is implemented using kernel drivers. The setting are configured using the .dts overlay file found in iolib/buttonLib/cap1293/cap12xx_v2/cap12xx_pca9542.dts. The following settings can be configured for now:
+
+ - Pin interrupt (configured via /boot/config.txt)
+ - sensor-gain (set to 2)
+ - keycodes (semi random values for now..)
+ - Signal guard
+ - 
+
+Once loaded (verified using dmesg), the button input is available via /dev/input/eventX. Consult the button_api_example.py for how to interface with this.
+
 ## Button API Usage Documentation
 
 Library to interface with front touch buttons.
