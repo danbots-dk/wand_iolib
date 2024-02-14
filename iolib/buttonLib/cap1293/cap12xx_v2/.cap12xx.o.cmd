@@ -1006,15 +1006,9 @@ deps_/home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/cap12xx.o := \
     $(wildcard include/config/LEDS_TRIGGER_CPU) \
     $(wildcard include/config/LEDS_TRIGGER_AUDIO) \
   include/dt-bindings/leds/common.h \
-  include/linux/of_irq.h \
-    $(wildcard include/config/PPC32) \
-    $(wildcard include/config/PPC_PMAC) \
-    $(wildcard include/config/OF_IRQ) \
-    $(wildcard include/config/SPARC) \
-  include/linux/irqdomain.h \
-    $(wildcard include/config/IRQ_DOMAIN_NOMAP) \
   include/linux/of.h \
     $(wildcard include/config/OF_DYNAMIC) \
+    $(wildcard include/config/SPARC) \
     $(wildcard include/config/OF_PROMTREE) \
     $(wildcard include/config/OF_KOBJ) \
     $(wildcard include/config/OF_NUMA) \
@@ -1054,6 +1048,8 @@ deps_/home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/cap12xx.o := \
     $(wildcard include/config/ACPI_LPIT) \
     $(wildcard include/config/ACPI_PPTT) \
     $(wildcard include/config/ACPI_PCC) \
+  include/linux/irqdomain.h \
+    $(wildcard include/config/IRQ_DOMAIN_NOMAP) \
   include/linux/resource_ext.h \
   include/acpi/acpi.h \
   include/acpi/platform/acenv.h \
@@ -1283,6 +1279,7 @@ deps_/home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/cap12xx.o := \
   include/linux/gpio/consumer.h \
     $(wildcard include/config/OF_GPIO) \
     $(wildcard include/config/GPIO_SYSFS) \
+  include/linux/bitfield.h \
 
 /home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/cap12xx.o: $(deps_/home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/cap12xx.o)
 

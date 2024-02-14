@@ -74,12 +74,12 @@
                 pinctrl-names = "default";
                 interrupt-parent = <&gpio>;
                 interrupts = <4 2>;
+                microchip,signal-guard = <1>;
+                microchip,sensitivity-delta-sense = <16>;
                 reg = <0x28>;
                 autorepeat;
                 microchip,sensor-gain = <2>;
-                linux,keycodes = <2>,
-                                 <3>,            /* KEY_2 */
-                                 <4>;            /* KEY_3 */           /* KEY_1 */
+                linux,keycodes = <2>;
                 #address-cells = <1>;
                 #size-cells = <0>;
                 status = "okay";
@@ -107,13 +107,12 @@
                 pinctrl-0 = <&cap1293_pins_1>;
                 pinctrl-names = "default";
                 interrupt-parent = <&gpio>;
+                microchip,signal-guard = <1>;
                 interrupts = <4 2>;
                 reg = <0x28>;
                 autorepeat;
                 microchip,sensor-gain = <2>;
-                linux,keycodes = <5>,
-                                 <6>,            /* KEY_2 */
-                                 <7>;            /* KEY_3 */           /* KEY_1 */
+                linux,keycodes = <5>;
                 #address-cells = <1>;
                 #size-cells = <0>;
                 status = "okay";
