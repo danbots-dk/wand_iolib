@@ -25,17 +25,7 @@ Copies libraries to /usr/local/lib/wand/iolib/ and overlay files from /usr/local
 The .deb package is comprised of multiple individual packages and drives.
 
 ###	buttonLib
-The button library is implemented using kernel drivers. The setting are configured using the .dts overlay file found in iolib/buttonLib/cap1293/cap12xx_v2/cap12xx_pca9542.dts. The following settings can be configured for now:
-
- - Pin interrupt (configured via /boot/config.txt)
- - sensor-gain (set to 2)
- - keycodes (semi random values for now..)
-
-A to do is to implement a calibration on power-on in the cap1293.c driver.
-
-Once loaded (verified using dmesg), the button input is available via /dev/input/eventX. Consult the button_api_example.py for how to interface with this.
-
-[Example use of buttons](./iolib/buttonLib/READme.md)
+[Example use of buttons](./iolib/buttonLib/README.md)
 
 ### EepromLib
 [Eeprom docs](./iolib/eepromLib/README.md)
