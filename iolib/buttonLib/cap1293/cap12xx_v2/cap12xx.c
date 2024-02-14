@@ -509,14 +509,11 @@ static int cap11xx_init_leds(struct device *dev,
 static int cap11xx_i2c_probe(struct i2c_client *i2c_client, const struct i2c_device_id *id)
 {
 	// const struct i2c_device_id *id = i2c_client_get_device_id(i2c_client);
-	pr_alert("new driver test!!");
 	struct device *dev = &i2c_client->dev;
 	struct cap11xx_priv *priv;
-	struct device_node *node;
 	const struct cap11xx_hw_model *cap;
-	int i, error, irq, gain = 0;
+	int i, error;
 	unsigned int val, rev;
-	u32 gain32;
 
 	if (id->driver_data >= ARRAY_SIZE(cap11xx_devices)) {
 		dev_err(dev, "Invalid device ID %lu\n", id->driver_data);
