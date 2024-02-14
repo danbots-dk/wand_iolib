@@ -26,7 +26,7 @@ Initializes a Button object with a specified button ID.
 
 Sets up an interrupt for the button, registering press, long press, and release events.
 
-- `press_callback_function` (function, optional): Callback function to handle press events.
+- `press_callback_function` (function, required): Callback function to handle press events.
 - `release_callback_function` (function, optional): Callback function to handle release events.
 - `while_pressed_callback_function` (function, optional): Callback function to run while the button is pressed.
 
