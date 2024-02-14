@@ -23,7 +23,6 @@ __pycache__/
 *.order
 *.d
 *.mod
-*.ko
 *.mod.c
 
 # dtoverlay compiled files
@@ -170,3 +169,4 @@ Thumbs.db #thumbnail cache on Windows
 
 tmp/
 iolib/buttonLib/cap1293/cap12xx_v2/device-tree.txt
+

@@ -1,6 +1,6 @@
 ## Button API Usage Documentation
 
-This script showcases the usage of the button API using `/dev/input/eventX` devices. It sets up an interrupt that triggers on the selected button, registering press, long press, and release events.
+Library to interface with front touch buttons.
 
 ### Function: `read_input_events(button_id, press_callback_function, release_callback_function=None, while_pressed_callback_function=None)`
 
@@ -8,7 +8,7 @@ Sets up an interrupt for a specified button.
 
 #### Parameters:
 - `button_id` (str): Identifier for the button. Possible values are `"front1"`, `"front2"`, or `"onoff"`.
-- `press_callback_function` (function): Callback function to handle press events.
+- `press_callback_function` (function, required): Callback function to handle press events.
 - `release_callback_function` (function, optional): Callback function to handle release events. Default is `None`.
 - `while_pressed_callback_function` (function, optional): Callback function to run while the button is pressed. Default is `None`.
 
@@ -104,4 +104,31 @@ if __name__ == "__main__":
 
     # Optionally, wait for user input to keep the program alive
     input("Press Enter to exit...")
+
+```
+# On the subject of compiling..
+The module is compiled as a Loadable-Kernel-Module (LKM) meaning the whole kernel does not need to be compile upon new changes. Running the make_kernel_module.sh script compile both the dtoverlay and copies it to the correct path and the cap1293 driver using the provided Makefile.
+In order to be able to compile for the current kernel version the following must be installed (note that when all devices run the same OS, it should not be necessary as once the driver is compiled it should be compatible everywhere).
+
+Dependencies
+```text
+sudo apt install git bc bison flex libssl-dev
+```
+
+Install
+```text
+sudo wget https://raw.githubusercontent.com/RPi-Distro/rpi-source/master/rpi-source -O /usr/local/bin/rpi-source && sudo chmod +x /usr/local/bin/rpi-source && /usr/local/bin/rpi-source -q --tag-update
+
+```
+Run
+```text
+rpi-source
+```
+
+
+## Resources
+[How to compile LKM](https://github.com/RPi-Distro/rpi-source)  
+[Bindings for writing dtoverlays](https://github.com/raspberrypi/linux/tree/77fc1fbcb5c013329af9583307dd1ff3cd4752aa/Documentation/devicetree/bindings)  
+[Docs for various drivers](https://github.com/raspberrypi/linux/tree/77fc1fbcb5c013329af9583307dd1ff3cd4752aa/Documentation)  
+
 
