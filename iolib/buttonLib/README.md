@@ -127,8 +127,8 @@ rpi-source
 
 
 ## Resources
-[How to compile LKM](https://github.com/RPi-Distro/rpi-source)
-[Bindings for writing dtoverlays](https://github.com/raspberrypi/linux/tree/77fc1fbcb5c013329af9583307dd1ff3cd4752aa/Documentation/devicetree/bindings)
-[Docs for various drivers](https://github.com/raspberrypi/linux/tree/77fc1fbcb5c013329af9583307dd1ff3cd4752aa/Documentation)
+[How to compile LKM](https://github.com/RPi-Distro/rpi-source)  
+[Bindings for writing dtoverlays](https://github.com/raspberrypi/linux/tree/77fc1fbcb5c013329af9583307dd1ff3cd4752aa/Documentation/devicetree/bindings)  
+[Docs for various drivers](https://github.com/raspberrypi/linux/tree/77fc1fbcb5c013329af9583307dd1ff3cd4752aa/Documentation)  
 
 
