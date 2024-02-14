@@ -1,1 +1,0 @@
-cmd_/home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/cap12xx.mod := printf '%s\n'   cap12xx.o | awk '!x[$$0]++ { print("/home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/"$$0) }' > /home/peter/wand_iolib/iolib/buttonLib/cap1293/cap12xx_v2/cap12xx.mod
