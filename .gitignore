@@ -24,6 +24,7 @@ __pycache__/
 *.d
 *.mod
 *.mod.c
+*.ko
 
 # dtoverlay compiled files
 *.dtbo
