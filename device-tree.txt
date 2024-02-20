@@ -2,7 +2,7 @@
 
 / {
 	compatible = "raspberrypi,4-compute-module\0brcm,bcm2711";
-	serial-number = "100000001934548a";
+	serial-number = "10000000297b5c0a";
 	model = "Raspberry Pi Compute Module 4 Rev 1.0";
 	memreserve = <0x38000000 0x8000000>;
 	interrupt-parent = <0x01>;
@@ -62,6 +62,13 @@
 			clock-output-names = "otg";
 			clock-frequency = <0x1c9c3800>;
 		};
+	};
+
+	power_ctrl {
+		gpios = <0x07 0x16 0x01>;
+		force;
+		compatible = "gpio-poweroff";
+		phandle = <0x138>;
 	};
 
 	memory@0 {
@@ -166,7 +173,7 @@
 		ethernet@7d580000 {
 			phy-handle = <0x2e>;
 			compatible = "brcm,bcm2711-genet-v5";
-			local-mac-address = [e4 5f 01 ac 15 e2];
+			local-mac-address = [e4 5f 01 ac 16 3f];
 			status = "okay";
 			#address-cells = <0x01>;
 			interrupts = <0x00 0x9d 0x04 0x00 0x9e 0x04>;
@@ -250,7 +257,7 @@
 	};
 
 	system {
-		linux,serial = <0x10000000 0x1934548a>;
+		linux,serial = <0x10000000 0x297b5c0a>;
 		linux,revision = <0xb03140>;
 	};
 
@@ -675,6 +682,12 @@
 				phandle = <0x67>;
 				brcm,pull = <0x00 0x02>;
 				brcm,function = <0x07>;
+			};
+
+			power_ctrl_pins {
+				brcm,pins = <0x16>;
+				phandle = <0x139>;
+				brcm,function = <0x01>;
 			};
 
 			rgmii_irq_gpio39 {
@@ -1295,6 +1308,12 @@
 				brcm,function = <0x07>;
 			};
 
+			mcp23017_pins@20 {
+				brcm,pins = <0x13>;
+				phandle = <0x114>;
+				brcm,function = <0x00>;
+			};
+
 			i2c0_gpio44 {
 				brcm,pins = <0x2c 0x2d>;
 				phandle = <0x23>;
@@ -1691,86 +1710,43 @@
 			pinctrl-0 = <0x15>;
 			pinctrl-names = "default";
 
+			mcp@20 {
+				compatible = "microchip,mcp23008";
+				gpio-controller;
+				status = "okay";
+				#interrupt-cells = <0x02>;
+				interrupt-parent = <0x07>;
+				interrupts = <0x13 0x02>;
+				phandle = <0x113>;
+				microchip,irq-mirror;
+				reg = <0x20>;
+				#gpio-cells = <0x02>;
+				interrupt-controller;
+			};
+
 			at24@50 {
 				compatible = "atmel,24c512\0microchip,24c256\0at24";
 				address-width = <0x10>;
 				#address-cells = <0x01>;
 				#size-cells = <0x00>;
 				size = <0x10000>;
-				phandle = <0xf0>;
+				phandle = <0x13a>;
 				pagesize = <0x80>;
 				reg = <0x50>;
+			};
+
+			max17040@36 {
+				compatible = "maxim,max17040";
+				status = "okay";
+				phandle = <0x10f>;
+				reg = <0x36>;
 			};
 
 			lm75@48 {
 				compatible = "national,lm75";
 				status = "okay";
-				phandle = <0xf3>;
+				phandle = <0x118>;
 				reg = <0x48>;
-			};
-
-			mux@70 {
-				compatible = "nxp,pca9548";
-				#address-cells = <0x01>;
-				#size-cells = <0x00>;
-				phandle = <0xf8>;
-				reg = <0x70>;
-
-				i2c@0 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x100>;
-					reg = <0x00>;
-				};
-
-				i2c@7 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x107>;
-					reg = <0x07>;
-				};
-
-				i2c@5 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x105>;
-					reg = <0x05>;
-				};
-
-				i2c@3 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x103>;
-					reg = <0x03>;
-				};
-
-				i2c@1 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x101>;
-					reg = <0x01>;
-				};
-
-				i2c@6 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x106>;
-					reg = <0x06>;
-				};
-
-				i2c@4 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x104>;
-					reg = <0x04>;
-				};
-
-				i2c@2 {
-					#address-cells = <0x01>;
-					#size-cells = <0x00>;
-					phandle = <0x102>;
-					reg = <0x02>;
-				};
 			};
 		};
 
@@ -2491,20 +2467,20 @@
 	};
 
 	chosen {
-		bootargs = "coherent_pool=1M 8250.nr_uarts=1 snd_bcm2835.enable_headphones=0 snd_bcm2835.enable_hdmi=1  smsc95xx.macaddr=E4:5F:01:AC:15:E2 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000  console=ttyS0,115200 console=tty1 root=PARTUUID=7e64a12f-02 rootfstype=ext4 fsck.repair=yes rootwait";
+		bootargs = "coherent_pool=1M 8250.nr_uarts=1 snd_bcm2835.enable_headphones=0 snd_bcm2835.enable_hdmi=1  smsc95xx.macaddr=E4:5F:01:AC:16:3F vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000  console=ttyS0,115200 console=tty1 root=PARTUUID=7e64a12f-02 rootfstype=ext4 fsck.repair=yes rootwait";
 		rpi-boardrev-ext = <0x00>;
 		log = <0x3ff80000 0x7ffe0>;
 		phandle = <0x3c>;
 		os_prefix;
 		overlay_prefix = [6f 76 65 72 6c 61 79 73 2f];
-		kaslr-seed = <0xa42d5f66 0x20e95811>;
+		kaslr-seed = <0x2065a38e 0x22e686e>;
 
 		bootloader {
 			version = "78ec57468d6bb1dd7051698539ec814d22a98c64";
 			capabilities = <0x7f>;
 			boot-mode = <0x01>;
 			partition = <0x00>;
-			rsts = <0x1020>;
+			rsts = <0x20>;
 			build-timestamp = <0x61a8a4d9>;
 			tryboot = <0x00>;
 			update-timestamp = <0x00>;
