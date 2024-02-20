@@ -1,0 +1,83 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    fragment@0 {
+        target = <&gpio>;
+        __overlay__ {
+            cap1293_pins_0: cap1293_pins_0 {
+                brcm,pins = <17>;
+                brcm,function = <0>; /* in */
+                brcm,pull = <0>; /* none */
+            };
+        };
+    };
+
+    fragment@1 {
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@0"; //phandle for i2c channel 1 on pca954x
+        __overlay__ {
+            status = "okay";
+            cap1293_0: cap1293_0@28 {
+                compatible = "microchip,cap1293";
+                pinctrl-0 = <&cap1293_pins_0>;
+                pinctrl-names = "default";
+                interrupt-parent = <&gpio>;
+                interrupts = <17 2>;
+                microchip,signal-guard = <1>;
+                microchip,sensitivity-delta-sense = <16>;
+                reg = <0x28>;
+                autorepeat;
+                microchip,sensor-gain = <2>;
+                linux,keycodes = <2>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+                status = "okay";
+            };
+        };
+    };
+
+    fragment@2 {
+        target = <&gpio>;
+        __overlay__ {
+            cap1293_pins_1: cap1293_pins_1 {
+                brcm,pins = <4>;
+                brcm,function = <0>; /* in */
+                brcm,pull = <0>; /* none */
+            };
+        };
+    };
+
+    fragment@3 {
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@1"; //phandle for i2c channel 1 on pca954x
+        __overlay__ {
+            status = "okay";
+            cap1293_1: cap1293_1@28 {
+                compatible = "microchip,cap1293";
+                pinctrl-0 = <&cap1293_pins_1>;
+                pinctrl-names = "default";
+                interrupt-parent = <&gpio>;
+                microchip,signal-guard = <1>;
+                interrupts = <4 2>;
+                reg = <0x28>;
+                autorepeat;
+                microchip,sensor-gain = <2>;
+                linux,keycodes = <5>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+                status = "okay";
+            };
+        };
+    };
+
+    int_pins: interrupt_pins {
+        compatible = "interrupt-pins";
+        int_pin_0: interrupt_0 {
+            int_pin = <&cap1293_0>, "interrupts:0",
+                      <&cap1293_pins_0>, "brcm,pins:0";
+        };
+        int_pin_1: interrupt_1 {
+            int_pin = <&cap1293_1>, "interrupts:0",
+                      <&cap1293_pins_1>, "brcm,pins:0";
+        };
+    };
+};
