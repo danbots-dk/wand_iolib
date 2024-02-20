@@ -1,5 +1,5 @@
 from evdev import InputDevice, categorize, ecodes
-from test_lib import SysLED
+from iolib.lp5562.indicatorLib import SysLED
 import time
 
 # Replace '/dev/input/event0' with the appropriate event device
