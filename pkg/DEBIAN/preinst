@@ -85,3 +85,10 @@ if ! grep -q "^dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_but
     printf "dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_button",keycode=0x101\n" >> /boot/config.txt 
 fi
 
+# Add software I2C on bus 8 for bno085
+sed /boot/config.txt -i -e "s/^#dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11/dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11/"
+if ! grep -q "^dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11" /boot/config.txt ; then 
+    printf "dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11\n" >> /boot/config.txt 
+fi
+
+

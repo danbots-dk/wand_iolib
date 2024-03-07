@@ -3,7 +3,41 @@ import time
 import threading
 
 class SysLED:
+    """
+    A class to control the LED brightness and blinking functionality of the system LED.
+
+    Attributes:
+        red (str): The path to the red LED brightness control file.
+        green (str): The path to the green LED brightness control file.
+        blue (str): The path to the blue LED brightness control file.
+        color (str): The current color of the LED.
+        blink_thread (threading.Thread): The thread responsible for blinking the LED.
+        stop_event (threading.Event): An event to signal stopping the blinking thread.
+
+    Methods:
+        __init__(self, channel=0):
+            Initializes the SysLED object with the specified LED channel.
+        set_brightness(self, r=None, g=None, b=None):
+            Sets the brightness of the LED for each color component (red, green, blue).
+        __blink_worker(self, r, g, b, on_time, off_time, n):
+            Worker function for the blinking functionality of the LED.
+        blink(self, r, g, b, on_time=1, off_time=1, n=None):
+            Starts blinking the LED with the specified color and timing parameters.
+        stop_blink(self):
+            Stops the blinking of the LED.
+        on(self, r=0, g=0, b=0):
+            Turns on the LED with the specified color.
+        off(self):
+            Turns off the LED.
+    """
+
     def __init__(self, channel=0):
+        """
+        Initializes the SysLED object with the specified LED channel.
+
+        Args:
+            channel (int): The channel number of the LED (default is 0).
+        """
         self.red = f"/sys/class/leds/red_{channel}/"
         self.green = f"/sys/class/leds/green_{channel}/"
         self.blue = f"/sys/class/leds/blue_{channel}/"
@@ -13,43 +47,87 @@ class SysLED:
         self.stop_event = threading.Event()
 
     def set_brightness(self, r=None, g=None, b=None):
-        if r != None:
+        """
+        Sets the brightness of the LED for each color component (red, green, blue).
+
+        Args:
+            r (int): Brightness value for the red color (0 to 255).
+            g (int): Brightness value for the green color (0 to 255).
+            b (int): Brightness value for the blue color (0 to 255).
+        """
+        if r is not None:
             r = max(0, min(r, 255))  # Ensure brightness is between 0 and 255
             with open(os.path.join(self.red, "brightness"), "w") as f:
                 f.write(str(r))
-        if g != None:
+        if g is not None:
             g = max(0, min(g, 255))  # Ensure brightness is between 0 and 255
             with open(os.path.join(self.green, "brightness"), "w") as f:
                 f.write(str(g))
-        if b != None:
+        if b is not None:
             b = max(0, min(b, 255))  # Ensure brightness is between 0 and 255
             with open(os.path.join(self.blue, "brightness"), "w") as f:
                 f.write(str(b))
 
-    def blink_worker(self, r, g, b, on_time, off_time, n):
+    def __blink_worker(self, r, g, b, on_time, off_time, n):
+        """
+        Worker function for the blinking functionality of the LED.
+
+        Args:
+            r (int): Brightness value for the red color (0 to 255).
+            g (int): Brightness value for the green color (0 to 255).
+            b (int): Brightness value for the blue color (0 to 255).
+            on_time (float): Time duration in seconds for the LED to be ON during each blink cycle.
+            off_time (float): Time duration in seconds for the LED to be OFF during each blink cycle.
+            n (int): Number of blink cycles (default is None for indefinite blinking).
+        """
         while n > 0 and not self.stop_event.is_set():
             self.set_brightness(r, g, b)
             time.sleep(on_time)
             if not self.stop_event.is_set():
-                self.set_brightness(0,0,0)
+                self.set_brightness(0, 0, 0)
                 time.sleep(off_time)
             n -= 1
 
-    def blink(self, r,g,b, on_time=1, off_time=1, n=None):
+    def blink(self, r, g, b, on_time=1, off_time=1, n=None):
+        """
+        Starts blinking the LED with the specified color and timing parameters.
+
+        Args:
+            r (int): Brightness value for the red color (0 to 255).
+            g (int): Brightness value for the green color (0 to 255).
+            b (int): Brightness value for the blue color (0 to 255).
+            on_time (float): Time duration in seconds for the LED to be ON during each blink cycle (default is 1).
+            off_time (float): Time duration in seconds for the LED to be OFF during each blink cycle (default is 1).
+            n (int): Number of blink cycles (default is None for indefinite blinking).
+        """
         self.stop_event.clear()
-        self.blink_thread = threading.Thread(target=self.blink_worker, args=(r,g,b, on_time, off_time, n))
+        self.blink_thread = threading.Thread(target=self.__blink_worker, args=(r, g, b, on_time, off_time, n))
         self.blink_thread.start()
 
     def stop_blink(self):
+        """
+        Stops the blinking of the LED.
+        """
         self.stop_event.set()
         if self.blink_thread:
             self.blink_thread.join()
 
     def on(self, r=0, g=0, b=0):
+        """
+        Turns on the LED with the specified color.
+
+        Args:
+            r (int): Brightness value for the red color (default is 0).
+            g (int): Brightness value for the green color (default is 0).
+            b (int): Brightness value for the blue color (default is 0).
+        """
         self.set_brightness(r, g, b)
 
     def off(self):
-        self.set_brightness(0,0,0)
+        """
+        Turns off the LED.
+        """
+        self.set_brightness(0, 0, 0)
 
 # Example usage:
 if __name__ == "__main__":
