@@ -73,16 +73,19 @@ class IMUlib:
         Returns:
         tuple: Tuple containing roll, pitch, and yaw angles in radians.
         '''
-        sinr_cosp = 2.0 * (quat_real * quat_i + quat_j * quat_k)
-        cosr_cosp = 1.0 - 2.0 * (quat_i * quat_i + quat_j * quat_j)
-        roll = math.atan2(sinr_cosp, cosr_cosp)
+        try:
+            sinr_cosp = 2.0 * (quat_real * quat_i + quat_j * quat_k)
+            cosr_cosp = 1.0 - 2.0 * (quat_i * quat_i + quat_j * quat_j)
+            roll = math.atan2(sinr_cosp, cosr_cosp)
 
-        sinp = 2.0 * (quat_real * quat_j - quat_k * quat_i)
-        pitch = math.asin(sinp)
+            sinp = 2.0 * (quat_real * quat_j - quat_k * quat_i)
+            pitch = math.asin(sinp)
 
-        siny_cosp = 2.0 * (quat_real * quat_k + quat_i * quat_j)
-        cosy_cosp = 1.0 - 2.0 * (quat_j * quat_j + quat_k * quat_k)
-        yaw = math.atan2(siny_cosp, cosy_cosp)
+            siny_cosp = 2.0 * (quat_real * quat_k + quat_i * quat_j)
+            cosy_cosp = 1.0 - 2.0 * (quat_j * quat_j + quat_k * quat_k)
+            yaw = math.atan2(siny_cosp, cosy_cosp)
+        except:
+            print("gimball lock - moving on")
 
         return roll, pitch, yaw
     
