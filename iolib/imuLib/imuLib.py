@@ -5,6 +5,8 @@ from adafruit_bno08x import (
     BNO_REPORT_ACCELEROMETER,
     BNO_REPORT_GYROSCOPE,
     BNO_REPORT_GAME_ROTATION_VECTOR,
+    BNO_REPORT_STABILITY_CLASSIFIER,
+    BNO_REPORT_ACTIVITY_CLASSIFIER
 )
 from adafruit_bno08x.i2c import BNO08X_I2C
 import math
@@ -29,6 +31,8 @@ class IMUlib:
         self.bno.enable_feature(BNO_REPORT_ACCELEROMETER)
         self.bno.enable_feature(BNO_REPORT_GYROSCOPE)
         self.bno.enable_feature(BNO_REPORT_GAME_ROTATION_VECTOR)
+        self.bno.enable_feature(BNO_REPORT_STABILITY_CLASSIFIER)
+        self.bno.enable_feature(BNO_REPORT_ACTIVITY_CLASSIFIER)
     
     def get_accel(self):
         '''
@@ -130,6 +134,16 @@ class IMUlib:
             }
         return relative_rot_vector
 
+    def device_in_motion(self):
+        '''
+        Returns:
+        bool: True if device is in motion, False otherwise
+        '''
+        activity_classification = self.bno.stability_classification
+        if activity_classification == "In motion":
+            return True
+        else:
+            return False
 
 def main():
     '''
@@ -137,7 +151,8 @@ def main():
     '''
     imu = IMUlib()
     while(1):
-        x = imu.get_relative_rotation_vector()
+        #x = imu.get_relative_rotation_vector()
+        x = imu.device_in_motion()
         print(x)
         time.sleep(0.01)
 
