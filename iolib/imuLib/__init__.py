@@ -1,2 +1,2 @@
 "wand_led module"
-from .imuLib import IMU
+from .imuLib import IMUlib
