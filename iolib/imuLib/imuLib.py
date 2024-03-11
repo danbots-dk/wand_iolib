@@ -6,7 +6,8 @@ from adafruit_bno08x import (
     BNO_REPORT_GYROSCOPE,
     BNO_REPORT_GAME_ROTATION_VECTOR,
     BNO_REPORT_STABILITY_CLASSIFIER,
-    BNO_REPORT_ACTIVITY_CLASSIFIER
+    BNO_REPORT_ACTIVITY_CLASSIFIER,
+    BNO_REPORT_ROTATION_VECTOR
 )
 from adafruit_bno08x.i2c import BNO08X_I2C
 import math
@@ -33,6 +34,7 @@ class IMUlib:
         self.bno.enable_feature(BNO_REPORT_GAME_ROTATION_VECTOR)
         self.bno.enable_feature(BNO_REPORT_STABILITY_CLASSIFIER)
         self.bno.enable_feature(BNO_REPORT_ACTIVITY_CLASSIFIER)
+        self.bno.enable_feature(BNO_REPORT_ROTATION_VECTOR)
     
     def get_accel(self):
         '''
@@ -140,7 +142,7 @@ class IMUlib:
         Returns:
         dict: Dictionary containing the quaternion values for the game rotation vector (i, j, k, and real parts).
         '''
-        quat_i, quat_j, quat_k, quat_real = self.bno.game_quaternion
+        quat_i, quat_j, quat_k, quat_real = self.bno.quaternion
         game_quaternion = {
             'i': quat_i,
             'j': quat_j,
