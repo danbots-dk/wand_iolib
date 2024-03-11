@@ -134,6 +134,48 @@ class IMUlib:
             }
         return relative_rot_vector
 
+
+    def get_quaternion(self):
+        '''
+        Returns:
+        dict: Dictionary containing the quaternion values for the game rotation vector (i, j, k, and real parts).
+        '''
+        quat_i, quat_j, quat_k, quat_real = self.bno.game_quaternion
+        game_quaternion = {
+            'i': quat_i,
+            'j': quat_j,
+            'k': quat_k,
+            'real': quat_real
+        }
+        return game_quaternion
+    
+
+    def get_absolute_rotation_vector(self, radians=False):
+        '''
+        Returns the relative roll, pitch, and yaw values based on the game rotation vector quaternion.
+
+        Args:
+        radians (bool, optional): If True, returns the values in radians. If False (default), returns the values in degrees.
+
+        Returns:
+        dict: Dictionary containing the relative roll, pitch, and yaw values.
+        '''
+        quaternion = self.get_quaternion()
+        roll, pitch, yaw = self._quaternion_to_euler_angle(quaternion['i'], quaternion['j'], quaternion['k'], quaternion['real'])
+        if radians:
+            relative_rot_vector = {
+                'roll': roll,
+                'pitch': pitch,
+                'yaw': yaw
+            }
+        else:
+            relative_rot_vector = {
+                'roll': math.degrees(roll),
+                'pitch': math.degrees(pitch),
+                'yaw': math.degrees(yaw)
+            }
+        return relative_rot_vector
+
     def device_in_motion(self):
         '''
         Returns:
@@ -152,7 +194,7 @@ def main():
     imu = IMUlib()
     while(1):
         #x = imu.get_relative_rotation_vector()
-        x = imu.device_in_motion()
+        x = imu.get_absolute_rotation_vector()
         print(x)
         time.sleep(0.01)
 
