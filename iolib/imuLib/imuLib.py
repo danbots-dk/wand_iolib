@@ -12,6 +12,9 @@ from adafruit_bno08x import (
 from adafruit_bno08x.i2c import BNO08X_I2C
 import math
 
+# importing datetime module
+import datetime
+import time
 
 class IMUlib:
     '''
@@ -54,6 +57,7 @@ class IMUlib:
         Returns:
         dict: Dictionary containing the normalized accelerometer readings for x, y, and z axes.
         '''
+        unix_timestamp = datetime.datetime.timestamp(datetime.datetime.now())*1000
         accel_x, accel_y, accel_z = self.bno.acceleration
         magnitude = (accel_x**2 + accel_y**2 + accel_z**2)**0.5
         normalized_x = accel_x / magnitude
@@ -62,7 +66,8 @@ class IMUlib:
         normalized_accel = {
             'x': normalized_x,
             'y': normalized_y,
-            'z': normalized_z
+            'z': normalized_z,
+            'time_stamp': unix_timestamp
         }
         return normalized_accel
 
@@ -196,7 +201,7 @@ def main():
     imu = IMUlib()
     while(1):
         #x = imu.get_relative_rotation_vector()
-        x = imu.get_absolute_rotation_vector()
+        x = imu.get_accel_norm()
         print(x)
         time.sleep(0.01)
 
