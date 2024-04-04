@@ -133,7 +133,7 @@ class AT24_EEPROM:
             size (int): The size of the assembly date.
 
         Returns:
-            str: The read assembly date
+            str: The read assembly date.
         """
         return self.read_parameter('assembly_date', size, 60)
 
