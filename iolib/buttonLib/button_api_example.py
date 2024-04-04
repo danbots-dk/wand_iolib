@@ -4,13 +4,13 @@ import time
 
 class Button:
     """
-    Represents a physical button connected to the system as an input device
+    Represents a physical button connected to the system as an input device.
     
     This class allows for the detection of button press, long press, and release events through callbacks.
     
     Attributes:
         device (InputDevice): The evdev InputDevice instance representing the physical button.
-        key_to_watch (int): The key code to watch for events.
+        key_to_watch (int): The key code to watch for events.s
     """
     
     def __init__(self, button_id):
