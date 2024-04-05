@@ -1,102 +1,111 @@
-from sys import path
-path.append("/usr/local/lib/wand/iolib")
-from ioLib2 import WandIO
+from evdev import InputDevice, categorize, ecodes
+import threading
 import time
-from typing import Callable, Optional
-import gpiod
 
 class Button:
-    def __init__(self):
+    """
+    Represents a physical button connected to the system as an input device..
+    
+    This class allows for the detection of button press, long press, and release events through callbacks.
+    
+    Attributes:
+        device (InputDevice): The evdev InputDevice instance representing the physical button.
+        key_to_watch (int): The key code to watch for events.s
+    """
+    
+    def __init__(self, button_id):
         """
-        Initializes the Button class with a WandIO instance.
-        """
-        self.wand = WandIO()
-        self.wand.configure_output("mcp", gpio_list=[1, "button_reset"])
-        self.reset_button()
-
-
-    def set_button_interrupt(self, callback: Callable[[gpiod.LineEvent], None] = None, longPress_callback: Callable = None, hold_time: float = None, button: str = None) -> None:
-        """
-        Sets up an interrupt for the specified button.
-
+        Initializes the Button with a device path based on the provided button ID.
+        
         Args:
-            callback (Callable[[gpiod.LineEvent], None]): The callback function to handle the interrupt.
-            longPress_callback (Callable): Callback function to handle long press.
-            hold_time (float): time until hold func is envoked
-            button (str): The button identifier ("front_top", "front_button", or "onoff_button").
+            button_id (str): A string identifier for the button (e.g., "onoff", "front1", "front2").
+            
+        Raises:
+            FileNotFoundError: If the specified input device does not exist.
+            PermissionError: If the program does not have permission to access the input device.
         """
+        device_path = ''
+        try:
+            if button_id == "onoff":
+                device_path = "/dev/input/event2"
+            elif button_id == "front2":
+                device_path = "/dev/input/event1"
+                self.key_to_watch = ecodes.KEY_A
+            elif button_id == "front1":
+                device_path = "/dev/input/event0"
+                self.key_to_watch = ecodes.KEY_1
+        except FileNotFoundError:
+            print(f"Error: Device not found at {device_path}")
+        except PermissionError:
+            print(f"Error: Insufficient permissions to access {device_path}")
 
-        if button == "front_button1":
-            # Interrupt handler for button1, callback runs in a separate thread 
-            self.wand.configure_interrupt(chip_label="mcp", gpio_list=[2, "button1"], rising_or_falling=1, hold=longPress_callback, hold_time=hold_time, callback=callback)
-        elif button == "front_button2":
-            # Interrupt handler for button2, callback runs in a separate thread    
-            self.wand.configure_interrupt(chip_label="mcp", gpio_list=[3, "button2"], rising_or_falling=1, hold=longPress_callback, hold_time=hold_time, callback=callback)
-        elif button == "onoff_button":
-            # Interrupt handler for on/off ic (max16150)
-            self.wand.configure_interrupt(chip_label="rpi", gpio_list=[27, "on_off_ic"], debounce=0.1, rising_or_falling=0, hold=longPress_callback, hold_time=hold_time, callback=callback)
-        else:
-            raise Exception(f"Button name input incorrect, received {button}")
+        self.device = InputDevice(device_path)
 
-    def release_button(self, button: str = None) -> None:
+    def read_input_events(self, press_callback_function, release_callback_function=None, while_pressed_callback_function=None):
         """
-        Releases the specified button or all button if unspecified
-
+        Starts listening for input events from the button, triggering callbacks as appropriate.
+        
+        This method sets up and starts a separate thread to listen for press, release, and while-pressed events.
+        
         Args:
-            button (str): The button to release, if not specified all buttons are released.
+            press_callback_function (callable): A function to call when the button is pressed.
+            release_callback_function (callable, optional): A function to call when the button is released.
+            while_pressed_callback_function (callable, optional): A function to call repeatedly while the button is pressed.
         """
-        if button == "front_button1":
-            self.wand.release_pin("mcp", 2)
-        elif button == "front_button2":
-            self.wand.release_pin("mcp", 3)
-        elif button == "onoff_button":
-            self.wand.release_pin("rpi", 27)
-        else:
-            self.wand.release_pin("mcp", 2)
-            self.wand.release_pin("mcp", 3)
-            self.wand.release_pin("rpi", 27)
+        def input_thread():
+            nonlocal is_pressed
+            for event in self.device.read_loop():
+                if event.type == ecodes.EV_KEY:
+                    key = categorize(event)
+                    if key.scancode == self.key_to_watch:
+                        if event.value == 1:
+                            press_callback_function(categorize(event))
+                            is_pressed = True
+                        elif event.value == 2 and while_pressed_callback_function is not None:
+                            while_pressed_thread = threading.Thread(target=while_pressed_thread_function)
+                            while_pressed_thread.daemon = True
+                            while_pressed_thread.start()
+                        elif event.value == 0 and release_callback_function is not None:
+                            release_callback_function(categorize(event))
+                            is_pressed = False
 
-    def reset_button(self) -> None:
-        """
-        Resets the button by toggling its output state.
-        """
-        # initialize pin state
+        def while_pressed_thread_function():
+            nonlocal is_pressed
+            while is_pressed:
+                while_pressed_callback_function()
 
-        self.wand.set_output("mcp", 1, 0)
-        time.sleep(0.01)
-        self.wand.set_output("mcp", 1, 1)
+        is_pressed = False
+        input_thread = threading.Thread(target=input_thread)
+        input_thread.daemon = True
+        input_thread.start()
 
-    def set_on_off_button_interrupt(self, callback: Callable[[gpiod.LineEvent], None]) -> None:
-        """
-        Sets up an interrupt for the on/off button press.
+def handle_press_event(event):
+    """
+    Handles button press events.
+    
+    Args:
+        event: The event object representing the button press.
+    """
+    print(f"Press: {event}")
 
-        Args:
-            callback (Callable[[gpiod.LineEvent], None]): The callback function to handle the interrupt.
-        """
-        self.wand.configure_interrupt(chip_label="rpi", gpio_list=[26, "on_off_button"], callback=callback)
+def handle_release_event(event):
+    """
+    Handles button release events.
+    
+    Args:
+        event: The event object representing the button release.
+    """
+    print(f"Release: {event}")
+
+def while_pressed_event():
+    """
+    A callback function executed continuously while the button is pressed.
+    """
+    print("Button is still pressed!")
+    time.sleep(0.1)
 
 if __name__ == "__main__":
-    import time
+    button = Button("front2")
+    button.read_input_events(press_callback_function=handle_press_event, release_callback_function=handle_release_event)
 
-    def int_callback(event: gpiod.LineEvent) -> None:
-        print("interrupt")
-
-    def onoff_callback(event: gpiod.LineEvent) -> None:
-        print("interrupt_onoff")
-
-    def hold():
-        print("holding123")
-
-    button = Button()
-    #button.set_button_interrupt(callback=int_callback, button="front_button1")
-    button.set_button_interrupt(callback=int_callback, button="front_button1")
-    button.set_button_interrupt(callback=int_callback, longPress_callback=hold, hold_time = 0.5, button="front_button2")
-    button.set_button_interrupt(callback=onoff_callback,longPress_callback=hold, hold_time = 2, button="onoff_button")
-    # button.wand.set_output("mcp", 1, 1)
-
-    while True:
-        reset = input("press enter to reset")
-        button.reset_button()
-        #wand = WandIO()
-        #print(wand.read_input("mcp", 2))
-        time.sleep(0.1)
+    input("Press Enter to exit...\n")
