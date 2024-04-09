@@ -2,7 +2,7 @@
 
 / {
 	compatible = "raspberrypi,4-compute-module\0brcm,bcm2711";
-	serial-number = "10000000297b5c0a";
+	serial-number = "1000000005f2739a";
 	model = "Raspberry Pi Compute Module 4 Rev 1.0";
 	memreserve = <0x38000000 0x8000000>;
 	interrupt-parent = <0x01>;
@@ -31,17 +31,17 @@
 			#size-cells = <0x01>;
 			no-map;
 			phandle = <0x48>;
-			reg = <0x00 0x3f1293e0 0x134>;
+			reg = <0x00 0x3f128e60 0x131>;
 		};
 
 		nvram@1 {
 			compatible = "raspberrypi,bootloader-public-key\0nvmem-rmem";
-			status = "okay";
+			status = "disabled";
 			#address-cells = <0x01>;
 			#size-cells = <0x01>;
 			no-map;
 			phandle = <0x49>;
-			reg = <0x00 0x3f128fa0 0x400>;
+			reg = <0x00 0x00 0x00>;
 		};
 	};
 
@@ -62,13 +62,6 @@
 			clock-output-names = "otg";
 			clock-frequency = <0x1c9c3800>;
 		};
-	};
-
-	power_ctrl {
-		gpios = <0x07 0x16 0x01>;
-		force;
-		compatible = "gpio-poweroff";
-		phandle = <0x138>;
 	};
 
 	memory@0 {
@@ -173,7 +166,7 @@
 		ethernet@7d580000 {
 			phy-handle = <0x2e>;
 			compatible = "brcm,bcm2711-genet-v5";
-			local-mac-address = [e4 5f 01 ac 16 3f];
+			local-mac-address = [e4 5f 01 3a 1e 33];
 			status = "okay";
 			#address-cells = <0x01>;
 			interrupts = <0x00 0x9d 0x04 0x00 0x9e 0x04>;
@@ -257,7 +250,7 @@
 	};
 
 	system {
-		linux,serial = <0x10000000 0x297b5c0a>;
+		linux,serial = <0x10000000 0x5f2739a>;
 		linux,revision = <0xb03140>;
 	};
 
@@ -398,6 +391,7 @@
 		ddc0 = "/soc/i2c@7ef04500";
 		uart1_pins = "/soc/gpio@7e200000/uart1_pins";
 		spi6_cs_pins = "/soc/gpio@7e200000/spi6_cs_pins";
+		i2c_gpio = "/i2c@0";
 		pwm0_0_gpio12 = "/soc/gpio@7e200000/pwm0_0_gpio12";
 		i2c1_gpio44 = "/soc/gpio@7e200000/i2c1_gpio44";
 		cma = "/reserved-memory/linux,cma";
@@ -682,12 +676,6 @@
 				phandle = <0x67>;
 				brcm,pull = <0x00 0x02>;
 				brcm,function = <0x07>;
-			};
-
-			power_ctrl_pins {
-				brcm,pins = <0x16>;
-				phandle = <0x139>;
-				brcm,function = <0x01>;
 			};
 
 			rgmii_irq_gpio39 {
@@ -1309,8 +1297,8 @@
 			};
 
 			mcp23017_pins@20 {
-				brcm,pins = <0x13>;
-				phandle = <0x114>;
+				brcm,pins = <0x04>;
+				phandle = <0x109>;
 				brcm,function = <0x00>;
 			};
 
@@ -1655,7 +1643,7 @@
 		spi@7e204000 {
 			compatible = "brcm,bcm2835-spi";
 			clocks = <0x08 0x14>;
-			status = "okay";
+			status = "disabled";
 			#address-cells = <0x01>;
 			interrupts = <0x00 0x76 0x04>;
 			cs-gpios = <0x07 0x08 0x01 0x07 0x07 0x01>;
@@ -1716,37 +1704,71 @@
 				status = "okay";
 				#interrupt-cells = <0x02>;
 				interrupt-parent = <0x07>;
-				interrupts = <0x13 0x02>;
-				phandle = <0x113>;
+				interrupts = <0x04 0x02>;
+				phandle = <0x108>;
 				microchip,irq-mirror;
 				reg = <0x20>;
 				#gpio-cells = <0x02>;
 				interrupt-controller;
 			};
 
-			at24@50 {
-				compatible = "atmel,24c512\0microchip,24c256\0at24";
-				address-width = <0x10>;
+			pcf8523@68 {
+				compatible = "nxp,pcf8523";
+				phandle = <0xf9>;
+				reg = <0x68>;
+			};
+
+			led-controller@30 {
+				compatible = "ti,lp5562";
+				clock-mode = <0x00>;
 				#address-cells = <0x01>;
 				#size-cells = <0x00>;
-				size = <0x10000>;
-				phandle = <0x13a>;
-				pagesize = <0x80>;
-				reg = <0x50>;
+				reg = <0x30>;
+				pwr-sel = <0x03>;
+
+				led@2 {
+					color = <0x02>;
+					chan-name = "blue_0";
+					led-cur = [32];
+					max-cur = [c8];
+					reg = <0x02>;
+				};
+
+				led@0 {
+					color = <0x00>;
+					chan-name = "red_0";
+					led-cur = [32];
+					max-cur = [c8];
+					reg = <0x00>;
+				};
+
+				led@1 {
+					color = <0x01>;
+					chan-name = "green_0";
+					led-cur = [32];
+					max-cur = [c8];
+					reg = <0x01>;
+				};
 			};
 
-			max17040@36 {
-				compatible = "maxim,max17040";
-				status = "okay";
-				phandle = <0x10f>;
-				reg = <0x36>;
-			};
+			mux@70 {
+				compatible = "nxp,pca9542";
+				#address-cells = <0x01>;
+				#size-cells = <0x00>;
+				phandle = <0x105>;
+				reg = <0x70>;
 
-			lm75@48 {
-				compatible = "national,lm75";
-				status = "okay";
-				phandle = <0x118>;
-				reg = <0x48>;
+				i2c@0 {
+					#address-cells = <0x01>;
+					#size-cells = <0x00>;
+					reg = <0x00>;
+				};
+
+				i2c@1 {
+					#address-cells = <0x01>;
+					#size-cells = <0x00>;
+					reg = <0x01>;
+				};
 			};
 		};
 
@@ -2235,7 +2257,7 @@
 		serial@7e215040 {
 			compatible = "brcm,bcm2835-aux-uart";
 			clocks = <0x11 0x00>;
-			status = "okay";
+			status = "disabled";
 			interrupts = <0x00 0x5d 0x04>;
 			skip-init;
 			phandle = <0x31>;
@@ -2446,6 +2468,7 @@
 		uart0 = "/soc/serial@7e201000";
 		spi3 = "/soc/spi@7e204600";
 		fb = "/soc/fb";
+		i2c_gpio = "/i2c@0";
 		i2s = "/soc/i2s@7e203000";
 		spi1 = "/soc/spi@7e215080";
 		usb = "/soc/usb@7e980000";
@@ -2467,23 +2490,23 @@
 	};
 
 	chosen {
-		bootargs = "coherent_pool=1M 8250.nr_uarts=1 snd_bcm2835.enable_headphones=0 snd_bcm2835.enable_hdmi=1  smsc95xx.macaddr=E4:5F:01:AC:16:3F vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000  console=ttyS0,115200 console=tty1 root=PARTUUID=7e64a12f-02 rootfstype=ext4 fsck.repair=yes rootwait";
+		bootargs = "coherent_pool=1M 8250.nr_uarts=0 snd_bcm2835.enable_headphones=0 snd_bcm2835.enable_hdmi=1  smsc95xx.macaddr=E4:5F:01:3A:1E:33 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000  console=ttyS0,115200 console=tty1 root=PARTUUID=7e64a12f-02 rootfstype=ext4 fsck.repair=yes rootwait";
 		rpi-boardrev-ext = <0x00>;
 		log = <0x3ff80000 0x7ffe0>;
 		phandle = <0x3c>;
 		os_prefix;
 		overlay_prefix = [6f 76 65 72 6c 61 79 73 2f];
-		kaslr-seed = <0x2065a38e 0x22e686e>;
+		kaslr-seed = <0xb203c236 0x96b619e5>;
 
 		bootloader {
-			version = "78ec57468d6bb1dd7051698539ec814d22a98c64";
-			capabilities = <0x7f>;
+			version = "d6d82cf99bcb3e9a166a34cfde53130957a36bd3";
+			capabilities = <0x1f>;
 			boot-mode = <0x01>;
 			partition = <0x00>;
 			rsts = <0x20>;
-			build-timestamp = <0x61a8a4d9>;
+			build-timestamp = <0x602bc758>;
 			tryboot = <0x00>;
-			update-timestamp = <0x00>;
+			update-timestamp = <0x602bc758>;
 		};
 	};
 
@@ -2540,6 +2563,16 @@
 		compatible = "arm,armv8-timer";
 		interrupts = <0x01 0x0d 0xf08 0x01 0x0e 0xf08 0x01 0x0b 0xf08 0x01 0x0a 0xf08>;
 		arm,cpu-registers-not-fw-configured;
+	};
+
+	i2c@8 {
+		gpios = <0x07 0x09 0x06 0x07 0x0b 0x06>;
+		compatible = "i2c-gpio";
+		#address-cells = <0x01>;
+		#size-cells = <0x00>;
+		phandle = <0xf1>;
+		reg = <0x08>;
+		i2c-gpio,delay-us = <0x02>;
 	};
 
 	clk-108M {

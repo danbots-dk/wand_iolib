@@ -3,10 +3,10 @@
 
 / {
     fragment@0 {
-        target = <&gpio>;
+        target = <0x108>;
         __overlay__ {
             cap1293_pins_0: cap1293_pins_0 {
-                brcm,pins = <17>;
+                brcm,pins = <2>;
                 brcm,function = <0>; /* in */
                 brcm,pull = <0>; /* none */
             };
@@ -19,10 +19,8 @@
             status = "okay";
             cap1293_0: cap1293_0@28 {
                 compatible = "microchip,cap1293";
-                pinctrl-0 = <&cap1293_pins_0>;
-                pinctrl-names = "default";
-                interrupt-parent = <&gpio>;
-                interrupts = <17 2>;
+                interrupt-parent = <0x108>;
+                interrupts = <2 2>;
                 microchip,signal-guard = <1>;
                 microchip,sensitivity-delta-sense = <16>;
                 reg = <0x28>;
@@ -37,10 +35,10 @@
     };
 
     fragment@2 {
-        target = <&gpio>;
+        target = <0x108>;
         __overlay__ {
             cap1293_pins_1: cap1293_pins_1 {
-                brcm,pins = <4>;
+                brcm,pins = <3>;
                 brcm,function = <0>; /* in */
                 brcm,pull = <0>; /* none */
             };
@@ -53,11 +51,9 @@
             status = "okay";
             cap1293_1: cap1293_1@28 {
                 compatible = "microchip,cap1293";
-                pinctrl-0 = <&cap1293_pins_1>;
-                pinctrl-names = "default";
-                interrupt-parent = <&gpio>;
+                interrupt-parent = <0x108>;
                 microchip,signal-guard = <1>;
-                interrupts = <4 2>;
+                interrupts = <3 2>;
                 reg = <0x28>;
                 autorepeat;
                 microchip,sensor-gain = <2>;
