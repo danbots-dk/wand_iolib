@@ -1298,7 +1298,7 @@
 
 			mcp23017_pins@20 {
 				brcm,pins = <0x04>;
-				phandle = <0x109>;
+				phandle = <0xf6>;
 				brcm,function = <0x00>;
 			};
 
@@ -1705,57 +1705,18 @@
 				#interrupt-cells = <0x02>;
 				interrupt-parent = <0x07>;
 				interrupts = <0x04 0x02>;
-				phandle = <0x108>;
+				phandle = <0xf5>;
 				microchip,irq-mirror;
 				reg = <0x20>;
 				#gpio-cells = <0x02>;
 				interrupt-controller;
 			};
 
-			pcf8523@68 {
-				compatible = "nxp,pcf8523";
-				phandle = <0xf9>;
-				reg = <0x68>;
-			};
-
-			led-controller@30 {
-				compatible = "ti,lp5562";
-				clock-mode = <0x00>;
-				#address-cells = <0x01>;
-				#size-cells = <0x00>;
-				reg = <0x30>;
-				pwr-sel = <0x03>;
-
-				led@2 {
-					color = <0x02>;
-					chan-name = "blue_0";
-					led-cur = [32];
-					max-cur = [c8];
-					reg = <0x02>;
-				};
-
-				led@0 {
-					color = <0x00>;
-					chan-name = "red_0";
-					led-cur = [32];
-					max-cur = [c8];
-					reg = <0x00>;
-				};
-
-				led@1 {
-					color = <0x01>;
-					chan-name = "green_0";
-					led-cur = [32];
-					max-cur = [c8];
-					reg = <0x01>;
-				};
-			};
-
 			mux@70 {
 				compatible = "nxp,pca9542";
 				#address-cells = <0x01>;
 				#size-cells = <0x00>;
-				phandle = <0x105>;
+				phandle = <0xf2>;
 				reg = <0x70>;
 
 				i2c@0 {
@@ -2496,7 +2457,7 @@
 		phandle = <0x3c>;
 		os_prefix;
 		overlay_prefix = [6f 76 65 72 6c 61 79 73 2f];
-		kaslr-seed = <0xb203c236 0x96b619e5>;
+		kaslr-seed = <0xab668273 0xae78952c>;
 
 		bootloader {
 			version = "d6d82cf99bcb3e9a166a34cfde53130957a36bd3";
