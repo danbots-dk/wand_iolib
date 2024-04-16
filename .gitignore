@@ -26,9 +26,6 @@ __pycache__/
 *.mod.c
 *.ko
 
-# dtoverlay compiled files
-*.dtbo
-
 # Distribution / packaging
 .Python
 build/
