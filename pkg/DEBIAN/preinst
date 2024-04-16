@@ -91,4 +91,8 @@ if ! grep -q "^dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11" /boot/co
     printf "dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11\n" >> /boot/config.txt 
 fi
 
+# Define Architecture constants
+if ! grep -q "^ARCH" /boot/config.txt ; then 
+    printf "ARCH=arm\narm_64bit=0\n" >> /boot/config.txt 
+fi
 

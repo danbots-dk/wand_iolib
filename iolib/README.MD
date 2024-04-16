@@ -37,6 +37,3 @@ Once loaded (verified using dmesg), the button input is available via /dev/input
 
 ### EepromLib
 [Eeprom docs](eepromLib/README.md)
-
-
-
