@@ -511,14 +511,14 @@ static struct lp55xx_device_config lp5562_cfg = {
 	.dev_attr_group     = &lp5562_group,
 };
 
-static int lp5562_probe(struct i2c_client *client)
+static int lp5562_probe(struct i2c_client *client,
+			const struct i2c_device_id *id)
 {
 	int ret;
 	struct lp55xx_chip *chip;
 	struct lp55xx_led *led;
 	struct lp55xx_platform_data *pdata = dev_get_platdata(&client->dev);
 	struct device_node *np = dev_of_node(&client->dev);
-
 	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
 	if (!chip)
 		return -ENOMEM;
@@ -529,14 +529,14 @@ static int lp5562_probe(struct i2c_client *client)
 		if (np) {
 			pdata = lp55xx_of_populate_pdata(&client->dev, np,
 							 chip);
-			if (IS_ERR(pdata))
+			if (IS_ERR(pdata)){
 				return PTR_ERR(pdata);
+				}
 		} else {
 			dev_err(&client->dev, "no platform data\n");
 			return -EINVAL;
 		}
 	}
-
 
 	led = devm_kcalloc(&client->dev,
 			pdata->num_channels, sizeof(*led), GFP_KERNEL);
@@ -545,11 +545,9 @@ static int lp5562_probe(struct i2c_client *client)
 
 	chip->cl = client;
 	chip->pdata = pdata;
-
 	mutex_init(&chip->lock);
 
 	i2c_set_clientdata(client, led);
-
 	ret = lp55xx_init_device(chip);
 	if (ret)
 		goto err_init;
@@ -563,7 +561,6 @@ static int lp5562_probe(struct i2c_client *client)
 		dev_err(&client->dev, "registering sysfs failed\n");
 		goto err_out;
 	}
-
 	return 0;
 
 err_out:
@@ -589,17 +586,19 @@ static const struct i2c_device_id lp5562_id[] = {
 };
 MODULE_DEVICE_TABLE(i2c, lp5562_id);
 
+#ifdef CONFIG_OF
 static const struct of_device_id of_lp5562_leds_match[] = {
 	{ .compatible = "ti,lp5562", },
 	{},
 };
 
 MODULE_DEVICE_TABLE(of, of_lp5562_leds_match);
+#endif
 
 static struct i2c_driver lp5562_driver = {
 	.driver = {
 		.name	= "lp5562",
-		.of_match_table = of_lp5562_leds_match,
+		.of_match_table = of_match_ptr(of_lp5562_leds_match),
 	},
 	.probe		= lp5562_probe,
 	.remove		= lp5562_remove,
