@@ -1,8 +1,16 @@
 #!/bin/bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-dtc -@ -I dts -O dtb -o /usr/local/lib/wand/iolib/lp5562/kernel_drivers/overlay/leds-lp5562.dtbo /usr/local/lib/wand/iolib/lp5562/kernel_drivers/leds-lp5562.dts
-sudo cp /usr/local/lib/wand/iolib/lp5562/kernel_drivers/overlay/leds-lp5562.dtbo /boot/overlays/
+if [ "$ARCH" = "aarch64" ]; then
+    echo "64-bit system detected"
+    sudo cp $SCRIPT_DIR/binary/v0.6/leds-lp5562.dtbo /boot/overlays/
+    sudo cp $SCRIPT_DIR/binary/v0.6/leds-lp5562_local.dtbo /boot/overlays/
+    sudo cp $SCRIPT_DIR/binary/v0.6/lp5562.ko.xz /lib/modules/$(uname -r)/kernel/drivers/leds
+else
+    echo "32-bit system detected"
+    sudo cp $SCRIPT_DIR/binary/v0.5/leds-lp5562.dtbo /boot/overlays/
+    sudo cp $SCRIPT_DIR/binary/v0.5/leds-lp5562_local.dtbo /boot/overlays/
+    sudo cp $SCRIPT_DIR/binary/v0.5/lp5562.ko.xz /lib/modules/$(uname -r)/kernel/drivers/leds
+fi
 
-cd /usr/local/lib/wand/iolib/lp5562/kernel_drivers/drivers/ && make -C /lib/modules/$(uname -r)/build M=$(pwd) modules
-cd /usr/local/lib/wand/iolib/lp5562/kernel_drivers/drivers/ && sudo make -C /lib/modules/$(uname -r)/build M=$(pwd) modules_install
 

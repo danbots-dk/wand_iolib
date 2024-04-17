@@ -6,9 +6,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ARCH=$(uname -m)
 
 
-
-
-
 if [ "$ARCH" = "aarch64" ]; then
     echo "64-bit system detected"
     cd "$SCRIPT_DIR/src_64bit" && make -C /lib/modules/$(uname -r)/build M=$(pwd) modules
