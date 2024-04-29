@@ -3,7 +3,85 @@
 
 / {
     fragment@0 {
-        target-path = "/soc/i2c@7e804000/mux@70/i2c@0"; //phandle for i2c channel 1 on pca954x
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@0"; // Targeting i2c channel 1 on pca954x
+
+        __overlay__ {
+            led-controller@33 {
+                #address-cells = <1>;
+                #size-cells = <0>;
+                compatible = "ti,lp5562";
+                reg = <0x33>;
+                clock-mode = <0>;
+                pwr-sel = <3>;    /* D1~9 connected to VOUT */
+
+                led@0 {
+                    reg = <0>;
+                    chan-name = "front_red_0";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <0>; // 0 red, 1 green, 2 blue
+                };
+
+                led@1 {
+                    reg = <1>;
+                    chan-name = "front_green_0";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <1>; // 0 red, 1 green, 2 blue
+                };
+
+                led@2 {
+                    reg = <2>;
+                    chan-name = "front_blue_0";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <2>; // 0 red, 1 green, 2 blue
+                };
+            };
+        };
+    };
+
+    fragment@1 {
+        target-path = "/soc/i2c@7e804000/mux@70/i2c@1"; // Targeting i2c@1
+
+        __overlay__ {
+            led-controller@33 {
+                #address-cells = <1>;
+                #size-cells = <0>;
+                compatible = "ti,lp5562";
+                reg = <0x33>;
+                clock-mode = <0>;
+                pwr-sel = <3>;    /* D1~9 connected to VOUT */
+
+                led@0 {
+                    reg = <0>;
+                    chan-name = "front_red_1";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <0>; // 0 red, 1 green, 2 blue
+                };
+
+                led@1 {
+                    reg = <1>;
+                    chan-name = "front_green_1";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <1>; // 0 red, 1 green, 2 blue
+                };
+
+                led@2 {
+                    reg = <2>;
+                    chan-name = "front_blue_1";
+                    led-cur = /bits/ 8 <0x32>;
+                    max-cur = /bits/ 8 <0xC8>;
+                    color = <2>; // 0 red, 1 green, 2 blue
+                };
+            };
+        };
+    };
+
+    fragment@2 {
+        target = <&i2c1>; // Targeting i2c1
 
         __overlay__ {
             led-controller@30 {
@@ -12,7 +90,7 @@
                 compatible = "ti,lp5562";
                 reg = <0x30>;
                 clock-mode = <0>;
-                pwr-sel = <3>;	/* D1~9 connected to VOUT */
+                pwr-sel = <3>;    /* D1~9 connected to VOUT */
 
                 led@0 {
                     reg = <0>;
@@ -37,9 +115,6 @@
                     max-cur = /bits/ 8 <0xC8>;
                     color = <2>; // 0 red, 1 green, 2 blue
                 };
-
-
-            
             };
         };
     };
