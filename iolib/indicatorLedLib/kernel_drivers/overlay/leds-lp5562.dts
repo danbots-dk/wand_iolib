@@ -94,7 +94,7 @@
 
                 led@0 {
                     reg = <0>;
-                    chan-name = "red_0";
+                    chan-name = "test_0";
                     led-cur = /bits/ 8 <0x32>;
                     max-cur = /bits/ 8 <0xC8>;
                     color = <0>; // 0 red, 1 green, 2 blue
@@ -102,7 +102,7 @@
 
                 led@1 {
                     reg = <1>;
-                    chan-name = "green_0";
+                    chan-name = "test_1";
                     led-cur = /bits/ 8 <0x32>;
                     max-cur = /bits/ 8 <0xC8>;
                     color = <1>; // 0 red, 1 green, 2 blue
@@ -110,7 +110,7 @@
 
                 led@2 {
                     reg = <2>;
-                    chan-name = "blue_0";
+                    chan-name = "test_2";
                     led-cur = /bits/ 8 <0x32>;
                     max-cur = /bits/ 8 <0xC8>;
                     color = <2>; // 0 red, 1 green, 2 blue
