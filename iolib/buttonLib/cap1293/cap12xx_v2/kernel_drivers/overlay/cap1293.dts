@@ -3,7 +3,7 @@
 
 / {
     fragment@0 {
-        target = <0xf5>;
+        target = <0xf1>;
         __overlay__ {
             cap1293_pins_0: cap1293_pins_0 {
                 brcm,pins = <2>;
@@ -19,7 +19,7 @@
             status = "okay";
             cap1293_0: cap1293_0@28 {
                 compatible = "microchip,cap1293";
-                interrupt-parent = <0xf5>;
+                interrupt-parent = <0xf1>;
                 interrupts = <2 2>;
                 microchip,signal-guard = <1>;
                 microchip,sensitivity-delta-sense = <16>;
@@ -35,7 +35,7 @@
     };
 
     fragment@2 {
-        target = <0xf5>;
+        target = <0xf1>;
         __overlay__ {
             cap1293_pins_1: cap1293_pins_1 {
                 brcm,pins = <3>;
@@ -51,9 +51,10 @@
             status = "okay";
             cap1293_1: cap1293_1@28 {
                 compatible = "microchip,cap1293";
-                interrupt-parent = <0xf5>;
+                interrupt-parent = <0xf1>;
                 microchip,signal-guard = <1>;
-                microchip,sensitivity-delta-sense = <16>;
+                microchip,sensitivity-delta-sense = <8>;
+                microchip,calib-sensitivity = <1>;
                 interrupts = <3 2>;
                 reg = <0x28>;
                 autorepeat;
