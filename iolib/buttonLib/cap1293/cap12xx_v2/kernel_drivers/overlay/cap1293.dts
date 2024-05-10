@@ -22,12 +22,14 @@
                 interrupt-parent = <0xf1>;
                 interrupts = <2 2>;
                 microchip,signal-guard = <1>;
-                microchip,sensitivity-delta-sense = <16>;
+                microchip,sensitivity-delta-sense = <32>;
                 reg = <0x28>;
                 autorepeat;
                 microchip,sensor-gain = <4>;
-                linux,keycodes = <2>;
+                microchip,calib-sensitivity = <4>;
+                linux,keycodes = <103>,	<106>, <102>; /* KEY_UP when triggered*/
                 #address-cells = <1>;
+                microchip,input-threshold = <60>, <50>, <127>;
                 #size-cells = <0>;
                 status = "okay";
             };
@@ -52,15 +54,16 @@
             cap1293_1: cap1293_1@28 {
                 compatible = "microchip,cap1293";
                 interrupt-parent = <0xf1>;
-                microchip,signal-guard = <1>;
-                microchip,sensitivity-delta-sense = <8>;
-                microchip,calib-sensitivity = <1>;
                 interrupts = <3 2>;
+                microchip,signal-guard = <1>;
+                microchip,sensitivity-delta-sense = <32>;  
                 reg = <0x28>;
                 autorepeat;
                 microchip,sensor-gain = <4>;
-                linux,keycodes = <5>;
+                microchip,calib-sensitivity = <4>;
+                linux,keycodes = <108>,	<106>, <104>; /* KEY_DOWN when triggered*/
                 #address-cells = <1>;
+                microchip,input-threshold = <60>, <50>, <127>;
                 #size-cells = <0>;
                 status = "okay";
             };
