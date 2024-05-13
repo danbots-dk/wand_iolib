@@ -3,4 +3,3 @@
 set -e
 
 rm -rf /usr/local/lib/wand/iolib/led/__pycache__
-systemctl disable neopixelService.service

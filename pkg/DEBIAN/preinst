@@ -68,27 +68,21 @@ if ! grep -q "^dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4,clock=10000000"
 fi
 
 # Map on/off to 0x102
-sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=0x102/dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=0x102/"
-if ! grep -q "^dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=0x102" /boot/config.txt ; then 
-    printf "dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=0x102\n" >> /boot/config.txt 
+sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=116/dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=116/"
+if ! grep -q "^dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=116" /boot/config.txt ; then 
+    printf "dtoverlay=gpio-key,gpio=26,active_low=1,label="onoff_button",keycode=116\n" >> /boot/config.txt 
 fi
 
-# Map button1 to 0x100
-sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="top_button",keycode=0x100/dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="top_button",keycode=0x100/"
-if ! grep -q "^dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="top_button",keycode=0x100" /boot/config.txt ; then 
-    printf "dtoverlay=gpio-key-mtch1010,gpio=2,active_low=1,label="top_button",keycode=0x100\n" >> /boot/config.txt 
-fi
-
-# Map button2 to 0x101
-sed /boot/config.txt -i -e "s/^#dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_button",keycode=0x101/dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_button",keycode=0x101/"
-if ! grep -q "^dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_button",keycode=0x101" /boot/config.txt ; then 
-    printf "dtoverlay=gpio-key-mtch1010,gpio=3,active_low=1,label="buttom_button",keycode=0x101\n" >> /boot/config.txt 
+# front touch buttons
+sed /boot/config.txt -i -e "s/^#dtoverlay=cap1293/dtoverlay=cap1293/"
+if ! grep -q "^dtoverlay=cap1293" /boot/config.txt ; then 
+    printf "dtoverlay=cap1293\n" >> /boot/config.txt 
 fi
 
 # Add software I2C on bus 8 for bno085
 sed /boot/config.txt -i -e "s/^#dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11/dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11/"
 if ! grep -q "^dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11" /boot/config.txt ; then 
-    printf "dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11\n" >> /boot/config.txt 
+    printf "dtoverlay=i2c-gpio,bus=8,i2c_gpio_sda=9,i2c_gpio_scl=11\n" >> /boot/config.txt
 fi
 
 # Define Architecture constants
