@@ -1,6 +1,9 @@
 /dts-v1/;
 /plugin/;
 
+/* NOTE: some changes requires a double reboot to take effect. Often, after just a single reboot either buttons will not produce a response. */
+
+
 / {
     fragment@0 {
         target = <0xf1>;
@@ -22,14 +25,14 @@
                 interrupt-parent = <0xf1>;
                 interrupts = <2 2>;
                 microchip,signal-guard = <1>;
-                microchip,sensitivity-delta-sense = <32>;
+                microchip,sensitivity-delta-sense = <16>;
                 reg = <0x28>;
                 autorepeat;
-                microchip,sensor-gain = <4>;
+                microchip,sensor-gain = <2>;
                 microchip,calib-sensitivity = <4>;
                 linux,keycodes = <103>,	<106>, <102>; /* KEY_UP when triggered*/
                 #address-cells = <1>;
-                microchip,input-threshold = <60>, <50>, <127>;
+                microchip,input-threshold = <40>, <50>, <127>;
                 #size-cells = <0>;
                 status = "okay";
             };
@@ -56,14 +59,14 @@
                 interrupt-parent = <0xf1>;
                 interrupts = <3 2>;
                 microchip,signal-guard = <1>;
-                microchip,sensitivity-delta-sense = <32>;  
+                microchip,sensitivity-delta-sense = <16>;  
                 reg = <0x28>;
                 autorepeat;
-                microchip,sensor-gain = <4>;
+                microchip,sensor-gain = <2>;
                 microchip,calib-sensitivity = <4>;
                 linux,keycodes = <108>,	<106>, <104>; /* KEY_DOWN when triggered*/
                 #address-cells = <1>;
-                microchip,input-threshold = <60>, <50>, <127>;
+                microchip,input-threshold = <40>, <50>, <127>;
                 #size-cells = <0>;
                 status = "okay";
             };
