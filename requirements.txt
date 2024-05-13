@@ -3,8 +3,6 @@ gpiozero
 adafruit-blinka
 adafruit-circuitpython-neopixel
 eeprom
-PySensors
 adafruit-circuitpython-lsm6ds
-zmq
 adafruit-circuitpython-bno08x
 adafruit-extended-bus
