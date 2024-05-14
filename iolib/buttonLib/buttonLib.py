@@ -52,6 +52,9 @@ class Button:
             release_callback_function (callable, optional): A function to call when the button is released.
             while_pressed_callback_function (callable, optional): A function to call repeatedly while the button is pressed.
         """
+        if while_pressed_callback_function is not None and release_callback_function is None:
+            raise Exception("Release callback function must be provided when while pressed callback function is defined.")
+            
         def input_thread():
             nonlocal is_pressed
             for event in self.device.read_loop():
