@@ -3,58 +3,111 @@ import time
 import subprocess
 
 class BootloaderConf:
+    """
+    A class to control GPIO pins on a Raspberry Pi for bootloader configuration.
+
+    Attributes:
+        None
+
+    Methods:
+        __init__(): Initializes the GPIO pins.
+        set_gpio_high(pin): Sets the specified GPIO pin to high.
+        set_gpio_low(pin): Sets the specified GPIO pin to low.
+        assert_bootloader(): Asserts bootloader mode by manipulating GPIO pins.
+        deassert_bootloader(): Deasserts bootloader mode by manipulating GPIO pins.
+        restart_computer(): Restarts the Raspberry Pi.
+    """
+
     def __init__(self):
-        # Set GPIO mode to BCM
+        """
+        Initializes the GPIO pins.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         GPIO.setmode(GPIO.BCM)
-        # Set GPIO 4 and 17 as output pins
         GPIO.setup(4, GPIO.OUT)
         GPIO.setup(17, GPIO.OUT)
     
     def set_gpio_high(self, pin):
+        """
+        Sets the specified GPIO pin to high.
+
+        Args:
+            pin (int): The GPIO pin number to set high.
+
+        Returns:
+            None
+        """
         GPIO.output(pin, GPIO.HIGH)
     
     def set_gpio_low(self, pin):
+        """
+        Sets the specified GPIO pin to low.
+
+        Args:
+            pin (int): The GPIO pin number to set low.
+
+        Returns:
+            None
+        """
         GPIO.output(pin, GPIO.LOW)
     
     def assert_bootloader(self):
+        """
+        Asserts bootloader mode by manipulating GPIO pins.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         try:
-            # Pull GPIO 4 high
             self.set_gpio_high(4)
             time.sleep(0.1)
-            # Pull GPIO 17 high
             self.set_gpio_high(17)
             time.sleep(0.1)
-
-            # Pull GPIO 4 low
             self.set_gpio_low(17)
-            # Pull GPIO 17 low
             self.set_gpio_low(4)
             
         finally:
-            # Clean up GPIO
             GPIO.cleanup()
 
     def deassert_bootloader(self):
+        """
+        Deasserts bootloader mode by manipulating GPIO pins.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         try:
-            # Pull GPIO 4 high
             self.set_gpio_high(4)
-            
-            # Pull GPIO 17 high
             self.set_gpio_high(17)
             time.sleep(0.1)
-            
-            # Pull GPIO 4 low
             self.set_gpio_low(4)
             time.sleep(0.1)
-
-            # Pull GPIO 17 high
             self.set_gpio_high(17)
             
         finally:
-            # Clean up GPIO
             GPIO.cleanup()
 
     def restart_computer(self):
+        """
+        Restarts the Raspberry Pi.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         subprocess.call(["shutdown", "-r", "-t", "0"])
 
 # Example usage
