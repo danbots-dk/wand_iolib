@@ -27,13 +27,13 @@ class Button:
         device_path = ''
         try:
             if button_id == "onoff":
-                device_path = "/dev/input/event2"
-            elif button_id == "front2":
-                device_path = "/dev/input/event1"
-                self.key_to_watch = ecodes.KEY_A
-            elif button_id == "front1":
                 device_path = "/dev/input/event0"
-                self.key_to_watch = ecodes.KEY_1
+            elif button_id == "front2":
+                device_path = "/dev/input/event2"
+                self.key_to_watch = ecodes.KEY_DOWN
+            elif button_id == "front1":
+                device_path = "/dev/input/event1"
+                self.key_to_watch = ecodes.KEY_UP
         except FileNotFoundError:
             print(f"Error: Device not found at {device_path}")
         except PermissionError:

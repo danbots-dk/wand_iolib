@@ -4,6 +4,6 @@ Architecture: all
 #Architecture: armhf
 Maintainer: Peter Holm <plh@danbots.com>
 Section: danbots/wand
-Depends: python3 (>=3.8), raspberrypi-kernel-headers
+Depends: python3 (>=3.8), raspberrypi-kernel-headers, python3-dev
 Priority: optional
 Description: Wand IO packages for LED and buttons
