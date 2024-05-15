@@ -12,7 +12,7 @@ fragment@1 {
             status = "okay";
             cap1293_0: cap1293_0@28 {
                 compatible = "microchip,cap1293";
-                interrupt-parent = <&{/soc/i2c@7e804000/mcp@20}>; // this is subject to change unfortunately.. use "dtc -I fs /proc/device-tree > device-tree.txt" to see updated interrupt-parent 
+                interrupt-parent = <0xf1>; // this is subject to change unfortunately.. use "dtc -I fs /proc/device-tree > device-tree.txt" to see updated interrupt-parent //
                 interrupts = <2 2>;
                 microchip,signal-guard = <1>;
                 microchip,sensitivity-delta-sense = <16>;
@@ -50,7 +50,7 @@ fragment@1 {
             status = "okay";
             cap1293_0: cap1293_0@28 {
                 compatible = "microchip,cap1293";
-                interrupt-parent = <&{/soc/i2c@7e804000/mcp@20}>;
+                interrupt-parent = <0xf1>;
                 interrupts = <2 2>;
                 microchip,signal-guard = <1>;
                 microchip,sensitivity-delta-sense = <16>;
@@ -58,7 +58,7 @@ fragment@1 {
                 autorepeat;
                 microchip,sensor-gain = <2>;
                 microchip,calib-sensitivity = <4>;
-                linux,keycodes = <103>,	<106>, <102>; /* KEY_UP when triggered*/
+                linux,keycodes = <103>,	<106>, <102>; // KEY_UP when triggered
                 #address-cells = <1>;
                 microchip,input-threshold = <40>, <50>, <127>;
                 #size-cells = <0>;
@@ -92,7 +92,7 @@ fragment@1 {
                 autorepeat;
                 microchip,sensor-gain = <2>;
                 microchip,calib-sensitivity = <4>;
-                linux,keycodes = <108>,	<106>, <104>; /* KEY_DOWN when triggered*/
+                linux,keycodes = <108>,	<106>, <104>; // KEY_DOWN when triggered
                 #address-cells = <1>;
                 microchip,input-threshold = <40>, <50>, <127>;
                 #size-cells = <0>;
