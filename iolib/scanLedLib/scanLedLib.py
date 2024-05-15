@@ -1,3 +1,5 @@
+from sys import path
+path.append("/usr/local/lib/wand/iolib")
 from sysfsPWM import PWM
 
 import time
