@@ -34,7 +34,8 @@ fragment@1 {
 
 / {
     fragment@0 {
-        target = <0xf1>;
+        target-path = "/soc/i2c@7e804000/mcp@20";
+        //target = <0xf1>;
         __overlay__ {
             cap1293_pins_0: cap1293_pins_0 {
                 brcm,pins = <2>;
@@ -50,7 +51,8 @@ fragment@1 {
             status = "okay";
             cap1293_0: cap1293_0@28 {
                 compatible = "microchip,cap1293";
-                interrupt-parent = <0xf1>;
+                interrupt-parent = <&cap1293_pins_0>;
+                //interrupt-parent = <0xf1>;
                 interrupts = <2 2>;
                 microchip,signal-guard = <1>;
                 microchip,sensitivity-delta-sense = <16>;
@@ -68,7 +70,7 @@ fragment@1 {
     };
 
     fragment@2 {
-        target = <0xf1>;
+        target-path = "/soc/i2c@7e804000/mcp@20";
         __overlay__ {
             cap1293_pins_1: cap1293_pins_1 {
                 brcm,pins = <3>;
@@ -84,7 +86,7 @@ fragment@1 {
             status = "okay";
             cap1293_1: cap1293_1@28 {
                 compatible = "microchip,cap1293";
-                interrupt-parent = <0xf1>;
+                interrupt-parent = <&cap1293_pins_1>;
                 interrupts = <3 2>;
                 microchip,signal-guard = <1>;
                 microchip,sensitivity-delta-sense = <16>;  
