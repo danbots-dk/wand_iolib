@@ -129,6 +129,24 @@ class SysLED:
         """
         self.set_brightness(0, 0, 0)
 
+    def get_state(self):
+        """ 
+        Gets state of LED.
+        
+        Returns:
+            int: Brightness value of the red LED.
+            int: Brightness value of the green LED.
+            int: Brightness value of the blue LED.
+        """
+        with open(os.path.join(self.red, "brightness"), "r") as f_red:
+            red_brightness = int(f_red.read())
+        with open(os.path.join(self.green, "brightness"), "r") as f_green:
+            green_brightness = int(f_green.read())
+        with open(os.path.join(self.blue, "brightness"), "r") as f_blue:
+            blue_brightness = int(f_blue.read())
+        return red_brightness, green_brightness, blue_brightness
+
+
 # Example usage:
 if __name__ == "__main__":
     led = SysLED(channel=0)
