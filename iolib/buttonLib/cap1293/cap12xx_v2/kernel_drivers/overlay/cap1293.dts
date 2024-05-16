@@ -94,7 +94,7 @@ fragment@1 {
                 autorepeat;
                 microchip,sensor-gain = <2>;
                 microchip,calib-sensitivity = <4>;
-                linux,keycodes = <108>,	<106>, <104>; // KEY_DOWN when triggered
+                linux,keycodes = <108>,	<105>, <104>; // KEY_DOWN when triggered
                 #address-cells = <1>;
                 microchip,input-threshold = <40>, <50>, <127>;
                 #size-cells = <0>;
