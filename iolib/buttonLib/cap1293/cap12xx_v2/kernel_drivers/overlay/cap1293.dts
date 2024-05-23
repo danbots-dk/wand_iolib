@@ -31,7 +31,7 @@ fragment@1 {
 
 */
 
-
+//<!--button1-->
 / {
     fragment@0 {
         target-path = "/soc/i2c@7e804000/mcp@20";
@@ -68,6 +68,8 @@ fragment@1 {
             };
         };
     };
+
+//<!--button1-->
 
     fragment@2 {
         target-path = "/soc/i2c@7e804000/mcp@20";
