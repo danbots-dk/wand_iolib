@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "preinstall script" 
 set -e
 
 # enable i2c
@@ -92,7 +93,9 @@ if ! grep -q "^dtoverlay=leds-lp5562_local" /boot/config.txt ; then
 fi
 
 # Define Architecture constants
+sed /boot/config.txt -i -e "s/^#ARCH=arm\narm_64bit=0/ARCH=arm\narm_64bit=0/"
 if ! grep -q "^ARCH" /boot/config.txt ; then 
     printf "ARCH=arm\narm_64bit=0\n" >> /boot/config.txt 
 fi
+
 
