@@ -88,7 +88,7 @@ class SysLED:
                 time.sleep(off_time)
             n -= 1
 
-    def blink(self, r, g, b, on_time=1, off_time=1, n=None):
+    def blink(self, r, g, b, on_time=1, off_time=1, n=float("inf")):
         """
         Starts blinking the LED with the specified color and timing parameters.
 
