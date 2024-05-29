@@ -11,8 +11,8 @@ class BootloaderConf:
 
     Methods:
         __init__(): Initializes the GPIO pins.
-        set_gpio_high(pin): Sets the specified GPIO pin to high.
-        set_gpio_low(pin): Sets the specified GPIO pin to low.
+        _set_gpio_high(pin): Sets the specified GPIO pin to high.
+        _set_gpio_low(pin): Sets the specified GPIO pin to low.
         assert_bootloader(): Asserts bootloader mode by manipulating GPIO pins.
         deassert_bootloader(): Deasserts bootloader mode by manipulating GPIO pins.
         restart_computer(): Restarts the Raspberry Pi.
@@ -32,7 +32,7 @@ class BootloaderConf:
         GPIO.setup(4, GPIO.OUT)
         GPIO.setup(17, GPIO.OUT)
     
-    def set_gpio_high(self, pin):
+    def _set_gpio_high(self, pin):
         """
         Sets the specified GPIO pin to high.
 
@@ -44,7 +44,7 @@ class BootloaderConf:
         """
         GPIO.output(pin, GPIO.HIGH)
     
-    def set_gpio_low(self, pin):
+    def _set_gpio_low(self, pin):
         """
         Sets the specified GPIO pin to low.
 
@@ -67,12 +67,12 @@ class BootloaderConf:
             None
         """
         try:
-            self.set_gpio_high(4)
+            self._set_gpio_high(4)
             time.sleep(0.1)
-            self.set_gpio_high(17)
+            self._set_gpio_high(17)
             time.sleep(0.1)
-            self.set_gpio_low(17)
-            self.set_gpio_low(4)
+            self._set_gpio_low(17)
+            self._set_gpio_low(4)
             
         finally:
             GPIO.cleanup()
@@ -88,12 +88,12 @@ class BootloaderConf:
             None
         """
         try:
-            self.set_gpio_high(4)
-            self.set_gpio_high(17)
+            self._set_gpio_high(4)
+            self._set_gpio_high(17)
             time.sleep(0.1)
-            self.set_gpio_low(4)
+            self._set_gpio_low(4)
             time.sleep(0.1)
-            self.set_gpio_high(17)
+            self._set_gpio_high(17)
             
         finally:
             GPIO.cleanup()
