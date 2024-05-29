@@ -21,7 +21,7 @@ class SysLED:
             Sets the brightness of the LED for each color component (red, green, blue).
         __blink_worker(self, r, g, b, on_time, off_time, n):
             Worker function for the blinking functionality of the LED.
-        blink(self, r, g, b, on_time=1, off_time=1, n=None):
+        blink(self, r, g, b, on_time=1, off_time=1, n=float("inf")):
             Starts blinking the LED with the specified color and timing parameters.
         stop_blink(self):
             Stops the blinking of the LED.
@@ -78,7 +78,7 @@ class SysLED:
             b (int): Brightness value for the blue color (0 to 255).
             on_time (float): Time duration in seconds for the LED to be ON during each blink cycle.
             off_time (float): Time duration in seconds for the LED to be OFF during each blink cycle.
-            n (int): Number of blink cycles (default is None for indefinite blinking).
+            n (float): Number of blink cycles (default is infinite for indefinite blinking).
         """
         while n > 0 and not self.stop_event.is_set():
             self.set_brightness(r, g, b)
@@ -98,7 +98,7 @@ class SysLED:
             b (int): Brightness value for the blue color (0 to 255).
             on_time (float): Time duration in seconds for the LED to be ON during each blink cycle (default is 1).
             off_time (float): Time duration in seconds for the LED to be OFF during each blink cycle (default is 1).
-            n (int): Number of blink cycles (default is None for indefinite blinking).
+            n (float): Number of blink cycles (default is infinite for indefinite blinking).
         """
         self.stop_event.clear()
         self.blink_thread = threading.Thread(target=self.__blink_worker, args=(r, g, b, on_time, off_time, n))
