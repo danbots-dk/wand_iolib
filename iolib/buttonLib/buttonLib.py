@@ -39,6 +39,7 @@ class Button:
         except PermissionError:
             print(f"Error: Insufficient permissions to access {device_path}")
 
+        self.pressed_debounce_time = 0.15
         self.device = InputDevice(device_path)
 
     def read_input_events(self, press_callback_function, release_callback_function=None, while_pressed_callback_function=None):
@@ -74,8 +75,14 @@ class Button:
 
         def while_pressed_thread_function():
             nonlocal is_pressed
+            last_call_time = 0
+            # small debounce to avoid re-pressing on release
             while is_pressed:
-                while_pressed_callback_function()
+                current_time = time.time()
+                if current_time - last_call_time >= self.pressed_debounce_time:
+                    while_pressed_callback_function()
+                    last_call_time = current_time
+                time.sleep(self.pressed_debounce_time / 2)  # Small sleep to avoid busy waiting
 
         is_pressed = False
         input_thread = threading.Thread(target=input_thread)
