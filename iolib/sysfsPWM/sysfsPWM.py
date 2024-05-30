@@ -61,6 +61,19 @@ class PWM:
         with open(os.path.join(self.base_path, "duty_cycle"), "w") as f:
             f.write(str(duty_cycle_ns))
 
+    def get_duty_cycle(self):
+        """Get the current duty cycle of the PWM signal.
+
+        Returns:
+            float: The duty cycle as a normalized value between 0 and 1.
+        """
+        with open(os.path.join(self.base_path, "duty_cycle"), "r") as f:
+            duty_cycle_ns = int(f.read())
+        
+        period_ns = self.get_period_ns()
+        duty_cycle_normalized = duty_cycle_ns / period_ns
+        return duty_cycle_normalized
+        
     def pwm_enable(self, enable):
         """Enable or disable the PWM signal.
 

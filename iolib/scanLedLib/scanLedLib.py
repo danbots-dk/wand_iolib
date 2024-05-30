@@ -61,6 +61,9 @@ class ScanLed:
         else:
             self.flash.pwm_enable(1)
 
+    def get_dias(self):
+        return self.dias.get_duty_cycle()
+
     def stop_pwm(self):
         """Stop PWM and close GPIO connections."""
         self.set_dias(0)
