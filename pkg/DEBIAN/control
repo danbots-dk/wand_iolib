@@ -1,9 +1,9 @@
 Package: danbots-wand-iolib
-Version: 1.0.7-13
+Version: 1.0.7-15
 Architecture: all
 #Architecture: armhf
 Maintainer: Peter Holm <plh@danbots.com>
 Section: danbots/wand
-Depends: python3 (>=3.8), raspberrypi-kernel-headers, python3-dev
+Depends: python3 (>=3.8), python3-pip, raspberrypi-kernel-headers, python3-dev
 Priority: optional
 Description: Wand IO packages for LED and buttons

@@ -5,7 +5,7 @@ set -e
 
 # enable i2c
 
-sed /boot/config.txt -i -e "s/^#dtparam=i2c_arm*/dtparam=i2c_arm=on/"
+sed /boot/config.txt -i -e "s/^#dtparam=i2c_arm=on/dtparam=i2c_arm=on/"
 # sed /etc/modules -i -e "s/^#[[:space:]]*\(i2c[-_]dev\)/\1/"
 # if ! grep -q "^i2c[-_]dev" /etc/modules; then 
 #     printf "i2c-dev\n" >> /etc/modules
