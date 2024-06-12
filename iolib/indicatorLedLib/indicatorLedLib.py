@@ -1,6 +1,17 @@
+"indicator lib for wand"
+#
+#   240500  AMW     First version
+#   240612  PLH     Chekking if hw exist and included logging
+
 import os
 import time
 import threading
+import logging
+from systemd import journal
+
+log = logging.getLogger("Wand_iolib")
+log.addHandler(journal.JournalHandler())
+log.info("Wand iolib loading")
 
 class SysLED:
     """
@@ -38,6 +49,7 @@ class SysLED:
         Args:
             channel (int): The channel number of the LED (default is 0).
         """
+        self.hw = True
         self.red = f"/sys/class/leds/red_{channel}/"
         self.green = f"/sys/class/leds/green_{channel}/"
         self.blue = f"/sys/class/leds/blue_{channel}/"
@@ -45,6 +57,10 @@ class SysLED:
         self.color = "red"
         self.blink_thread = None
         self.stop_event = threading.Event()
+        if not os.path.exists(self.red):
+
+            log.warning("Statusled HW not present")
+            self.hw = False
 
     def set_brightness(self, r=None, g=None, b=None):
         """
@@ -55,20 +71,22 @@ class SysLED:
             g (int): Brightness value for the green color (0 to 255).
             b (int): Brightness value for the blue color (0 to 255).
         """
+        if not self.hw:
+            return
         if r is not None:
             r = max(0, min(r, 255))  # Ensure brightness is between 0 and 255
-            with open(os.path.join(self.red, "brightness"), "w") as f:
+            with open(os.path.join(self.red, "brightness"), "w", encoding="utf8") as f:
                 f.write(str(r))
         if g is not None:
             g = max(0, min(g, 255))  # Ensure brightness is between 0 and 255
-            with open(os.path.join(self.green, "brightness"), "w") as f:
+            with open(os.path.join(self.green, "brightness"), "w", encoding="utf8") as f:
                 f.write(str(g))
         if b is not None:
             b = max(0, min(b, 255))  # Ensure brightness is between 0 and 255
-            with open(os.path.join(self.blue, "brightness"), "w") as f:
+            with open(os.path.join(self.blue, "brightness"), "w", encoding="utf8") as f:
                 f.write(str(b))
 
-    def __blink_worker(self, r, g, b, on_time, off_time, n):
+    def __blink_worker(self, r, g, b, on_time, off_time, n):    # pylint: disable=too-many-arguments
         """
         Worker function for the blinking functionality of the LED.
 
@@ -88,7 +106,7 @@ class SysLED:
                 time.sleep(off_time)
             n -= 1
 
-    def blink(self, r, g, b, on_time=1, off_time=1, n=float("inf")):
+    def blink(self, r, g, b, on_time=1, off_time=1, n=float("inf")):    # pylint: disable=too-many-arguments
         """
         Starts blinking the LED with the specified color and timing parameters.
 
@@ -138,11 +156,11 @@ class SysLED:
             int: Brightness value of the green LED.
             int: Brightness value of the blue LED.
         """
-        with open(os.path.join(self.red, "brightness"), "r") as f_red:
+        with open(os.path.join(self.red, "brightness"), "r", encoding="utf8") as f_red:
             red_brightness = int(f_red.read())
-        with open(os.path.join(self.green, "brightness"), "r") as f_green:
+        with open(os.path.join(self.green, "brightness"), "r", encoding="utf8") as f_green:
             green_brightness = int(f_green.read())
-        with open(os.path.join(self.blue, "brightness"), "r") as f_blue:
+        with open(os.path.join(self.blue, "brightness"), "r", encoding="utf8") as f_blue:
             blue_brightness = int(f_blue.read())
         return red_brightness, green_brightness, blue_brightness
 
